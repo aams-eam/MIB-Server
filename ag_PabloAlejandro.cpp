@@ -1242,12 +1242,12 @@ nodo* loadMIB() {
 	filaTablaHistoricos.indice = dia;
 
 	dia[0].tipo_obj = 4;
-	dia[0].tipo_de_dato = 0;
+	dia[0].tipo_de_dato = 1;
 	dia[0].acceso = 1;
 	memset(dia[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(dia[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(dia[0].oid, "1.3.6.1.3.53.9.8.1.1");
-	strcpy(dia[0].instancia, "1.3.6.1.3.53.9.8.1.1.1");
+	strcpy(dia[0].instancia, "1.3.6.1.3.53.9.8.1.1.2.0.0.6.2.0");
 	dia[0].tipo_valor.val.val_int = 1;
 	dia[0].tipo_valor.sig_fila = NULL;
 	dia[0].tipo_valor.sig_col = NULL;
@@ -1255,12 +1255,12 @@ nodo* loadMIB() {
 	dia[0].indice = NULL;
 
 	dia[1].tipo_obj = 4;
-	dia[1].tipo_de_dato = 0;
+	dia[1].tipo_de_dato = 1;
 	dia[1].acceso = 1;
 	memset(dia[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(dia[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(dia[1].oid, "1.3.6.1.3.53.9.8.1.1");
-	strcpy(dia[1].instancia, "1.3.6.1.3.53.9.8.1.1.2");
+	strcpy(dia[1].instancia, "1.3.6.1.3.53.9.8.1.1.2.1.1.2.2.0");
 	dia[1].tipo_valor.val.val_int = 2;
 	dia[1].tipo_valor.sig_fila = NULL;
 	dia[1].tipo_valor.sig_col = &nombrePersona[1].tipo_valor;
