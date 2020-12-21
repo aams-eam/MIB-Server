@@ -272,7 +272,14 @@ int main(int argc, char* argv[])
 	memset(ipDisp->instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(ipDisp->oid, "1.3.6.1.3.53.9.5");
 	strcpy(ipDisp->instancia, "1.3.6.1.3.53.9.5.0");
-	ipDisp->tipo_valor.val.val_cad = (char*)"192.168.1.2";
+	uint8_t temp[4];
+	temp[0] = 127;
+	temp[1] = 0;
+	temp[2] = 0;
+	temp[3] = 1;
+	ipDisp->tipo_valor.val.val_cad = malloc(4);
+	memcpy(ipDisp->tipo_valor.val.val_cad, temp, 4); // TEMP *** para codificarlo como si fuera una ip
+	// ipDisp->tipo_valor.val.val_cad = (char*)"192.168.1.2";
 	ipDisp->tipo_valor.sig_fila = NULL;
 	ipDisp->tipo_valor.sig_col = NULL;
 	ipDisp->sig = tablaHistoricos;
@@ -311,7 +318,7 @@ int main(int argc, char* argv[])
 	memset(diaAno[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(diaAno[0].oid, "1.3.6.1.3.53.9.6.1.1");
 	strcpy(diaAno[0].instancia, "1.3.6.1.3.53.9.6.1.1.100");
-	diaAno[0].tipo_valor.val.val_int = 128;
+	diaAno[0].tipo_valor.val.val_int = 100;
 	diaAno[0].tipo_valor.sig_fila = &diaAno[1].tipo_valor;
 	diaAno[0].tipo_valor.sig_col = &nEntradas[0].tipo_valor;
 	diaAno[0].sig = &diaAno[1];
@@ -324,7 +331,7 @@ int main(int argc, char* argv[])
 	memset(diaAno[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(diaAno[1].oid, "1.3.6.1.3.53.9.6.1.1");
 	strcpy(diaAno[1].instancia, "1.3.6.1.3.53.9.6.1.1.127");
-	diaAno[1].tipo_valor.val.val_int = 200;
+	diaAno[1].tipo_valor.val.val_int = 127;
 	diaAno[1].tipo_valor.sig_fila = NULL;
 	diaAno[1].tipo_valor.sig_col = &nEntradas[1].tipo_valor;
 	diaAno[1].sig = &nEntradas[0];
@@ -545,7 +552,7 @@ int main(int argc, char* argv[])
 	memset(dia[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(dia[0].oid, "1.3.6.1.3.53.9.8.1.1");
 	strcpy(dia[0].instancia, "1.3.6.1.3.53.9.8.1.1.50");
-	dia[0].tipo_valor.val.val_int = 1;
+	dia[0].tipo_valor.val.val_int = 50;
 	dia[0].tipo_valor.sig_fila = NULL;
 	dia[0].tipo_valor.sig_col = NULL;
 	dia[0].sig = &dia[1];
@@ -558,7 +565,7 @@ int main(int argc, char* argv[])
 	memset(dia[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(dia[1].oid, "1.3.6.1.3.53.9.8.1.1");
 	strcpy(dia[1].instancia, "1.3.6.1.3.53.9.8.1.1.120");
-	dia[1].tipo_valor.val.val_int = 2;
+	dia[1].tipo_valor.val.val_int = 120;
 	dia[1].tipo_valor.sig_fila = NULL;
 	dia[1].tipo_valor.sig_col = &nombrePersona[1].tipo_valor;
 	dia[1].sig = &nombrePersona[0];
@@ -1242,7 +1249,6 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 				// miramos si está dentro de los bounds
 				if (V.val.val_int < auxiliar->min_bound || V.val.val_int > auxiliar->max_bound) {
 					cout << endl << "EL INTEGER NO SE CORRESPONDE CON LOS LIMITES" << endl;
-					cout << "============================================" << endl << endl;
 
 					seterror = 3; // badValue error
 					seterror_index = 1;
@@ -1258,7 +1264,7 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 					trapdest.sin_family = AF_INET;
 					inet_pton(PF_INET, "127.0.0.1", &trapdest.sin_addr.s_addr);
 					trapdest.sin_port = htons(TRAPPORT); // choose any
-					int ret = sendto(s, trapmsg, ltrap, 0, (const struct sockaddr*)&trapdest, (socklen_t)sizeof(trapdest));
+					int ret = sendto(s, trapmsg, ltrap, 0, (const struct sockaddr*)&trapdest, (socklen_t)sizeof(trapdest)); // TEMP *** hace que se reciva un paquete raro, eliminar esta instrucción
 					cout << "message SENT to: " << ntohs(trapdest.sin_port) << " - " << ret << " bytes" << endl;
 				}
 				else {
@@ -1408,7 +1414,7 @@ nodo* loadMIB() {
 	memset(diaAno[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(diaAno[0].oid, "1.3.6.1.3.53.9.6.1.1");
 	strcpy(diaAno[0].instancia, "1.3.6.1.3.53.9.6.1.1.100");
-	diaAno[0].tipo_valor.val.val_int = 128;
+	diaAno[0].tipo_valor.val.val_int = 100;
 	diaAno[0].tipo_valor.sig_fila = &diaAno[1].tipo_valor;
 	diaAno[0].tipo_valor.sig_col = &nEntradas[0].tipo_valor;
 	diaAno[0].sig = &diaAno[1];
@@ -1421,7 +1427,7 @@ nodo* loadMIB() {
 	memset(diaAno[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(diaAno[1].oid, "1.3.6.1.3.53.9.6.1.1");
 	strcpy(diaAno[1].instancia, "1.3.6.1.3.53.9.6.1.1.127");
-	diaAno[1].tipo_valor.val.val_int = 200;
+	diaAno[1].tipo_valor.val.val_int = 127;
 	diaAno[1].tipo_valor.sig_fila = NULL;
 	diaAno[1].tipo_valor.sig_col = &nEntradas[1].tipo_valor;
 	diaAno[1].sig = &nEntradas[0];
@@ -1525,6 +1531,7 @@ nodo* loadMIB() {
 	memset(ipDispositivo[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(ipDispositivo[1].oid, "1.3.6.1.3.53.9.7.1.1");
 	strcpy(ipDispositivo[1].instancia, "1.3.6.1.3.53.9.7.1.1.192.168.1.4");
+	// TEMP cambiar el valor de los val_cad con ip para que sea un array de bytes con cada número un byte
 	ipDispositivo[1].tipo_valor.val.val_cad = (char*)"192.168.1.4";
 	ipDispositivo[1].tipo_valor.sig_fila = NULL;
 	ipDispositivo[1].tipo_valor.sig_col = &modeloDispositivo[1].tipo_valor;
@@ -1642,7 +1649,7 @@ nodo* loadMIB() {
 	memset(dia[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(dia[0].oid, "1.3.6.1.3.53.9.8.1.1");
 	strcpy(dia[0].instancia, "1.3.6.1.3.53.9.8.1.1.50");
-	dia[0].tipo_valor.val.val_int = 1;
+	dia[0].tipo_valor.val.val_int = 50;
 	dia[0].tipo_valor.sig_fila = NULL;
 	dia[0].tipo_valor.sig_col = NULL;
 	dia[0].sig = &dia[1];
@@ -1655,7 +1662,7 @@ nodo* loadMIB() {
 	memset(dia[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(dia[1].oid, "1.3.6.1.3.53.9.8.1.1");
 	strcpy(dia[1].instancia, "1.3.6.1.3.53.9.8.1.1.120");
-	dia[1].tipo_valor.val.val_int = 2;
+	dia[1].tipo_valor.val.val_int = 120;
 	dia[1].tipo_valor.sig_fila = NULL;
 	dia[1].tipo_valor.sig_col = &nombrePersona[1].tipo_valor;
 	dia[1].sig = &nombrePersona[0];
