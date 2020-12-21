@@ -1,0 +1,193 @@
+GRUPO9-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+	experimental,OBJECT-TYPE,IpAddress
+		FROM SNMPv2-SMI;
+
+experimental OBJECT IDENTIFIER ::={iso(1) org(3) dod(6) internet(1) experimental(3)}
+
+grupo9 OBJECT IDENTIFIER ::= { experimental 53 9 }
+
+nombreDispositivo OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS current
+	DESCRIPTION
+		"Nombre del dispositivo"
+	::={ grupo9 1 }
+
+personaContacto OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS current
+	DESCRIPTION
+		"Numero de servicio tecnico"
+	::={ grupo9 2 }
+
+personasEntran OBJECT-TYPE
+	SYNTAX INTEGER
+	ACCESS read-write
+	STATUS current
+	DESCRIPTION
+		"Numero de personas que han entrado"
+	::={ grupo9 3 }
+
+personasSalen OBJECT-TYPE
+	SYNTAX INTEGER
+	ACCESS read-write
+	STATUS current
+	DESCRIPTION
+		"Numero de personas que han salido"
+	::={ grupo9 4 }
+
+ipDisp OBJECT-TYPE
+	SYNTAX IpAddress
+	ACCESS read-only
+	STATUS current
+	DESCRIPTION
+		"IP del dispositivo"
+	::={ grupo9 5 }
+
+tablaHistoricos OBJECT-TYPE
+	SYNTAX SEQUENCE OF EntradaTablaHistoricos
+	ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"La tabla que contiene la informacion sobre cada dia del año"
+	::={ grupo9 6 }
+
+filaTablaHistoricos OBJECT-TYPE
+	SYNTAX EntradaTablaHistoricos
+	ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"Informacion sobre un parametro concreto"
+	INDEX{diaAno}
+	::={ tablaHistoricos 1 }
+
+EntradaTablaHistoricos ::=
+	SEQUENCE{
+		diaAno OCTET STRING,
+		nEntradas INTEGER,
+		nSalidas INTEGER}
+
+diaAno OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS current
+	DESCRIPTION
+		"Dia del año"
+	::={ filaTablaHistoricos 1 }
+
+nEntradas OBJECT-TYPE
+	SYNTAX INTEGER
+	ACCESS read-write
+	STATUS current
+	DESCRIPTION
+		"Numero de entradas en un dia del año determinado"
+	::={ filaTablaHistoricos 2 }
+
+nSalidas OBJECT-TYPE
+	SYNTAX INTEGER
+	ACCESS read-write
+	STATUS current
+	DESCRIPTION
+		"Numero de salidas en un dia del año determinado"
+	::={ filaTablaHistoricos 3 }
+
+tablaDispositivos OBJECT-TYPE
+	SYNTAX SEQUENCE OF EntradaTablaDispositivos
+	ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"La tabla que contiene la informacion sobre los dispositivos instalados"
+	::={ grupo9 7 }
+
+filaTablaDispositivos OBJECT-TYPE
+	SYNTAX EntradaTablaDispositivos
+	ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"Informacion sobre un dispositivo concreto"
+	INDEX{ipDispositivo}
+	::={ tablaDispositivos 1 }
+
+EntradaTablaDispositivos ::=
+	SEQUENCE{
+		ipDispositivo IpAddress,
+		modeloDispositivo OCTET STRING,
+		tipoTarjeta INTEGER,
+		fechaInstalacion OCTET STRING}
+
+ipDispositivo OBJECT-TYPE
+	SYNTAX IpAddress
+	ACCESS read-only
+	STATUS current
+	DESCRIPTION
+		"IP del dispositivo"
+	::={ filaTablaDispositivos 1 }
+
+modeloDispositivo OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-write
+	STATUS current
+	DESCRIPTION
+		"Modelo del dispositivo"
+	::={ filaTablaDispositivos 2 }
+
+tipoTarjeta OBJECT-TYPE
+	SYNTAX INTEGER
+	ACCESS read-write
+	STATUS current
+	DESCRIPTION
+		"Tipo de tarjeta"
+	::={ filaTablaDispositivos 3 }
+
+fechaInstalacion OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-write
+	STATUS current
+	DESCRIPTION
+		"Fecha de instalacion del dispositivo"
+	::={ filaTablaDispositivos 4 }
+
+tablaRevisiones OBJECT-TYPE
+	SYNTAX SEQUENCE OF EntradaTablaRevisiones
+	ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"La tabla que contiene la informacion sobre las revisiones realizadas al sistema"
+	::={ grupo9 8 }
+
+filaTablaRevisiones OBJECT-TYPE
+	SYNTAX EntradaTablaRevisiones
+	ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"Informacion sobre un parametro concreto"
+	INDEX{dia}
+	::={ tablaRevisiones 1 }
+
+EntradaTablaRevisiones ::=
+	SEQUENCE{
+		dia OCTET STRING,
+		nombrePersona OCTET STRING}
+
+dia OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS current
+	DESCRIPTION
+		"Dia del año que se reviso"
+	::={ filaTablaRevisiones 1 }
+
+nombrePersona OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-write
+	STATUS current
+	DESCRIPTION
+		"Persona que se encargo de la revision"
+	::={ filaTablaRevisiones 2 }
+
+END
+
