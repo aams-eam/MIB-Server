@@ -1013,7 +1013,7 @@ nodo* loadMIB() {
 	memset(diaAno[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(diaAno[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(diaAno[0].oid, "1.3.6.1.3.53.9.6.1.1");
-	strcpy(diaAno[0].instancia, "1.3.6.1.3.53.9.6.1.1.20-12-20");
+	strcpy(diaAno[0].instancia, "1.3.6.1.3.53.9.6.1.1.2.0.1.2.2.0");
 	diaAno[0].tipo_valor.val.val_cad = (char*)"20-12-20";
 	diaAno[0].tipo_valor.sig_fila = &diaAno[1].tipo_valor;
 	diaAno[0].tipo_valor.sig_col = &nEntradas[0].tipo_valor;
@@ -1026,7 +1026,7 @@ nodo* loadMIB() {
 	memset(diaAno[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(diaAno[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(diaAno[1].oid, "1.3.6.1.3.53.9.6.1.1");
-	strcpy(diaAno[1].instancia, "1.3.6.1.3.53.9.6.1.1.21-12-20");
+	strcpy(diaAno[1].instancia, "1.3.6.1.3.53.9.6.1.1.2.1.1.2.2.0");
 	diaAno[1].tipo_valor.val.val_cad = (char*)"21-12-20";
 	diaAno[1].tipo_valor.sig_fila = NULL;
 	diaAno[1].tipo_valor.sig_col = &nEntradas[1].tipo_valor;
@@ -1039,7 +1039,7 @@ nodo* loadMIB() {
 	memset(nEntradas[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nEntradas[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nEntradas[0].oid, "1.3.6.1.3.53.9.6.1.2");
-	strcpy(nEntradas[0].instancia, "1.3.6.1.3.53.9.6.1.2.20-12-20");
+	strcpy(nEntradas[0].instancia, "1.3.6.1.3.53.9.6.1.2.2.0.1.2.2.0");
 	nEntradas[0].tipo_valor.val.val_int = 3;
 	nEntradas[0].tipo_valor.sig_fila = &nEntradas[1].tipo_valor;
 	nEntradas[0].tipo_valor.sig_col = &nSalidas[0].tipo_valor;
@@ -1052,7 +1052,7 @@ nodo* loadMIB() {
 	memset(nEntradas[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nEntradas[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nEntradas[1].oid, "1.3.6.1.3.53.9.6.1.2");
-	strcpy(nEntradas[1].instancia, "1.3.6.1.3.53.9.6.1.2.21-12-20");
+	strcpy(nEntradas[1].instancia, "1.3.6.1.3.53.9.6.1.2.2.1.1.2.2.0");
 	nEntradas[1].tipo_valor.val.val_int = 4;
 	nEntradas[1].tipo_valor.sig_fila = NULL;
 	nEntradas[1].tipo_valor.sig_col = &nSalidas[1].tipo_valor;
@@ -1065,7 +1065,7 @@ nodo* loadMIB() {
 	memset(nSalidas[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nSalidas[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nSalidas[0].oid, "1.3.6.1.3.53.9.6.1.3");
-	strcpy(nSalidas[0].instancia, "1.3.6.1.3.53.9.6.1.3.20-12-20");
+	strcpy(nSalidas[0].instancia, "1.3.6.1.3.53.9.6.1.3.2.0.1.2.2.0");
 	nSalidas[0].tipo_valor.val.val_int = 5;
 	nSalidas[0].tipo_valor.sig_fila = &nSalidas[1].tipo_valor;
 	nSalidas[0].tipo_valor.sig_col = NULL;
@@ -1078,7 +1078,7 @@ nodo* loadMIB() {
 	memset(nSalidas[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nSalidas[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nSalidas[1].oid, "1.3.6.1.3.53.9.6.1.3");
-	strcpy(nSalidas[1].instancia, "1.3.6.1.3.53.9.6.1.3.21-12-20");
+	strcpy(nSalidas[1].instancia, "1.3.6.1.3.53.9.6.1.3.2.1.1.2.2.0");
 	nSalidas[1].tipo_valor.val.val_int = 6;
 	nSalidas[1].tipo_valor.sig_fila = NULL;
 	nSalidas[1].tipo_valor.sig_col = NULL;
@@ -1273,7 +1273,7 @@ nodo* loadMIB() {
 	memset(nombrePersona[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nombrePersona[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nombrePersona[0].oid, "1.3.6.1.3.53.9.8.1.2");
-	strcpy(nombrePersona[0].instancia, "1.3.6.1.3.53.9.8.1.2.20-06-20");
+	strcpy(nombrePersona[0].instancia, "1.3.6.1.3.53.9.8.1.2.2.0.0.6.2.0");
 	nombrePersona[0].tipo_valor.val.val_cad = (char*)"Alejandro Moreno";
 	nombrePersona[0].tipo_valor.sig_fila = &nombrePersona[1].tipo_valor;
 	nombrePersona[0].tipo_valor.sig_col = NULL;
@@ -1286,12 +1286,12 @@ nodo* loadMIB() {
 	memset(nombrePersona[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nombrePersona[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nombrePersona[1].oid, "1.3.6.1.3.53.9.8.1.2");
-	strcpy(nombrePersona[1].instancia, "1.3.6.1.3.53.9.8.1.2.21-12-20");
+	strcpy(nombrePersona[1].instancia, "1.3.6.1.3.53.9.8.1.2.2.1.1.2.2.0");
 	nombrePersona[1].tipo_valor.val.val_cad = (char*)"Pablo de Juan";
 	nombrePersona[1].tipo_valor.sig_fila = NULL;
-	nEntradas[1].tipo_valor.sig_col = NULL;
-	nEntradas[1].sig = NULL;
-	nEntradas[1].indice = NULL;
+	nombrePersona[1].tipo_valor.sig_col = NULL;
+	nombrePersona[1].sig = NULL;
+	nombrePersona[1].indice = NULL;
 
 	return nombreDispositivo;
 }
