@@ -1,0 +1,77 @@
+CONSTRUCCIÓN DE UNA MIB
+- (*M*) Construya la MIB que define la información gestionada por el agente. Defina
+todos los objetos dentro de la rama experimental, que posee el OID 1.3.6.1.3.
+Sustituya grupo por nombre (cada alumno dispondrá así de una rama distinta dentro
+del nodo ‘experimental’).
+
+- Incluya objetos que piense que podrían mejorar la gestión del dispositivo.
+
+- (*M*) Compile la MIB y compruebe que es correcta.
+
+
+CONSTRUCCIÓN DEL SERVIDOR UDP
+- (*M*) Cree un proyecto con el nombre ag_<grupo>, sustituyendo <grupo> por su
+nombre; el fichero fuente creado debería tener la extensión .cpp.
+
+- (*M*) Implemente la funcionalidad de un servidor UDP. El puerto en el que se
+escucha debe ser configurable, bien en el programa, bien como parámetro de
+llamada.
+
+
+CARGA DE LA MIB EN EL AGENTE
+- (*M*) Carga de la MIB estáticamente.
+
+- (*M*) Poder cargar un módulo MIB en el agente que contenga sólo objetos escalares
+(ninguna tabla) de tipo INTEGER.
+
+- Cargar definiciones de objetos escalares de tipo OCTET STRING, OBJECT IDENTIFIER
+e IpAddress.
+
+- (*M*) Distinguir entre objetos que no pueden escribirse (read-only) y objetos que
+pueden escribirse y leerse (read-write); este valor aparece en la cláusula MAXACCESS.
+
+- Cargar definiciones de objetos tabulares (tablas) de un solo índice; las columnas
+pueden ser read-only o read-write. Exige distinguir objetos not-accessible (nodo tabla
+y nodo fila).
+
+
+MENSAJES SNMP
+- (*M*) Procesar mensajes que contengan sólo un objeto (en realidad, un par objetovalor).
+
+- Procesar mensajes con objetos que correspondan a una tabla o alguno de sus
+componentes. -> un solo objeto.
+
+- Tratamiento adecuado de los códigos de error cuando se produzca algún fallo durante
+el procesamiento.
+
+Operación de Lectura
+- Procesamiento de mensajes con un solo objeto escalar.
+	i) (*M*) Objetos de tipo INTEGER.
+	ii) Objetos de tipo OCTET STRING, OBJECT IDENTIFIER e IpAddress.
+
+- Procesamiento de mensajes con objetos tabulares (un objeto o varios). Hay 2
+categorías:
+	i) Con índice de tipo INTEGER.
+	ii) Con índice de tipo IpAddress.
+- Identificación de errores en el procesamiento de la petición y generación de la
+respuesta con un código de error adecuado.
+
+Operación de Escritura
+- Procesamiento de mensajes con un solo objeto escalar.
+	i) (*M*) Objetos de tipo INTEGER.
+	ii) Objetos de tipo OCTET STRING, OBJECT IDENTIFIER e IpAddress.
+
+- Identificación de errores en el procesamiento de la petición y generación de la
+respuesta con un código de error adecuado.
+
+
+RECORRIDO DE LA MIB
+- Procesamiento de mensajes con un solo objeto escalar.
+	i) (*M*) Objetos de tipo INTEGER.
+	ii) Objetos de tipo OCTET STRING, OBJECT IDENTIFIER e IpAddress.
+- Identificación de errores en el procesamiento de la petición y generación de la
+respuesta con un código de error adecuado.
+
+
+GESTIÓN DE NOTIFICACIONES
+- Envío correcto pero ManageEngine no recibe el mensaje.

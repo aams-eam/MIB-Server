@@ -1018,26 +1018,26 @@ nodo* loadMIB() {
 	filaTablaHistoricos.indice = diaAno;
 
 	diaAno[0].tipo_obj = 4;
-	diaAno[0].tipo_de_dato = 1;
+	diaAno[0].tipo_de_dato = 0;
 	diaAno[0].acceso = 1;
 	memset(diaAno[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(diaAno[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(diaAno[0].oid, "1.3.6.1.3.53.9.6.1.1");
-	strcpy(diaAno[0].instancia, "1.3.6.1.3.53.9.6.1.1.20-12-20");
-	diaAno[0].tipo_valor.val.val_cad = (char*)"20-12-20";
+	strcpy(diaAno[0].instancia, "1.3.6.1.3.53.9.6.1.1.100");
+	diaAno[0].tipo_valor.val.val_int = 128;
 	diaAno[0].tipo_valor.sig_fila = &diaAno[1].tipo_valor;
 	diaAno[0].tipo_valor.sig_col = &nEntradas[0].tipo_valor;
 	diaAno[0].sig = &diaAno[1];
 	diaAno[0].indice = NULL;
 
 	diaAno[1].tipo_obj = 4;
-	diaAno[1].tipo_de_dato = 1;
+	diaAno[1].tipo_de_dato = 0;
 	diaAno[1].acceso = 1;
 	memset(diaAno[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(diaAno[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(diaAno[1].oid, "1.3.6.1.3.53.9.6.1.1");
-	strcpy(diaAno[1].instancia, "1.3.6.1.3.53.9.6.1.1.21-12-20");
-	diaAno[1].tipo_valor.val.val_cad = (char*)"21-12-20";
+	strcpy(diaAno[1].instancia, "1.3.6.1.3.53.9.6.1.1.127");
+	diaAno[1].tipo_valor.val.val_int = 200;
 	diaAno[1].tipo_valor.sig_fila = NULL;
 	diaAno[1].tipo_valor.sig_col = &nEntradas[1].tipo_valor;
 	diaAno[1].sig = &nEntradas[0];
@@ -1049,7 +1049,7 @@ nodo* loadMIB() {
 	memset(nEntradas[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nEntradas[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nEntradas[0].oid, "1.3.6.1.3.53.9.6.1.2");
-	strcpy(nEntradas[0].instancia, "1.3.6.1.3.53.9.6.1.2.20-12-20");
+	strcpy(nEntradas[0].instancia, "1.3.6.1.3.53.9.6.1.1.100");
 	nEntradas[0].tipo_valor.val.val_int = 3;
 	nEntradas[0].tipo_valor.sig_fila = &nEntradas[1].tipo_valor;
 	nEntradas[0].tipo_valor.sig_col = &nSalidas[0].tipo_valor;
@@ -1062,7 +1062,7 @@ nodo* loadMIB() {
 	memset(nEntradas[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nEntradas[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nEntradas[1].oid, "1.3.6.1.3.53.9.6.1.2");
-	strcpy(nEntradas[1].instancia, "1.3.6.1.3.53.9.6.1.2.21-12-20");
+	strcpy(nEntradas[1].instancia, "1.3.6.1.3.53.9.6.1.1.127");
 	nEntradas[1].tipo_valor.val.val_int = 4;
 	nEntradas[1].tipo_valor.sig_fila = NULL;
 	nEntradas[1].tipo_valor.sig_col = &nSalidas[1].tipo_valor;
@@ -1075,7 +1075,7 @@ nodo* loadMIB() {
 	memset(nSalidas[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nSalidas[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nSalidas[0].oid, "1.3.6.1.3.53.9.6.1.3");
-	strcpy(nSalidas[0].instancia, "1.3.6.1.3.53.9.6.1.3.20-12-20");
+	strcpy(nSalidas[0].instancia, "1.3.6.1.3.53.9.6.1.1.100");
 	nSalidas[0].tipo_valor.val.val_int = 5;
 	nSalidas[0].tipo_valor.sig_fila = &nSalidas[1].tipo_valor;
 	nSalidas[0].tipo_valor.sig_col = NULL;
@@ -1088,7 +1088,7 @@ nodo* loadMIB() {
 	memset(nSalidas[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nSalidas[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nSalidas[1].oid, "1.3.6.1.3.53.9.6.1.3");
-	strcpy(nSalidas[1].instancia, "1.3.6.1.3.53.9.6.1.3.21-12-20");
+	strcpy(nSalidas[1].instancia, "1.3.6.1.3.53.9.6.1.1.127");
 	nSalidas[1].tipo_valor.val.val_int = 6;
 	nSalidas[1].tipo_valor.sig_fila = NULL;
 	nSalidas[1].tipo_valor.sig_col = NULL;
@@ -1257,7 +1257,7 @@ nodo* loadMIB() {
 	memset(dia[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(dia[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(dia[0].oid, "1.3.6.1.3.53.9.8.1.1");
-	strcpy(dia[0].instancia, "1.3.6.1.3.53.9.8.1.1.1");
+	strcpy(dia[0].instancia, "1.3.6.1.3.53.9.8.1.1.50");
 	dia[0].tipo_valor.val.val_int = 1;
 	dia[0].tipo_valor.sig_fila = NULL;
 	dia[0].tipo_valor.sig_col = NULL;
@@ -1270,7 +1270,7 @@ nodo* loadMIB() {
 	memset(dia[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(dia[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(dia[1].oid, "1.3.6.1.3.53.9.8.1.1");
-	strcpy(dia[1].instancia, "1.3.6.1.3.53.9.8.1.1.2");
+	strcpy(dia[1].instancia, "1.3.6.1.3.53.9.8.1.1.120");
 	dia[1].tipo_valor.val.val_int = 2;
 	dia[1].tipo_valor.sig_fila = NULL;
 	dia[1].tipo_valor.sig_col = &nombrePersona[1].tipo_valor;
@@ -1283,7 +1283,7 @@ nodo* loadMIB() {
 	memset(nombrePersona[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nombrePersona[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nombrePersona[0].oid, "1.3.6.1.3.53.9.8.1.2");
-	strcpy(nombrePersona[0].instancia, "1.3.6.1.3.53.9.8.1.2.20-06-20");
+	strcpy(nombrePersona[0].instancia, "1.3.6.1.3.53.9.8.1.2.50");
 	nombrePersona[0].tipo_valor.val.val_cad = (char*)"Alejandro Moreno";
 	nombrePersona[0].tipo_valor.sig_fila = &nombrePersona[1].tipo_valor;
 	nombrePersona[0].tipo_valor.sig_col = NULL;
@@ -1296,12 +1296,12 @@ nodo* loadMIB() {
 	memset(nombrePersona[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nombrePersona[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nombrePersona[1].oid, "1.3.6.1.3.53.9.8.1.2");
-	strcpy(nombrePersona[1].instancia, "1.3.6.1.3.53.9.8.1.2.21-12-20");
+	strcpy(nombrePersona[1].instancia, "1.3.6.1.3.53.9.8.1.2.120");
 	nombrePersona[1].tipo_valor.val.val_cad = (char*)"Pablo de Juan";
 	nombrePersona[1].tipo_valor.sig_fila = NULL;
-	nEntradas[1].tipo_valor.sig_col = NULL;
-	nEntradas[1].sig = NULL;
-	nEntradas[1].indice = NULL;
+	nombrePersona[1].tipo_valor.sig_col = NULL;
+	nombrePersona[1].sig = NULL;
+	nombrePersona[1].indice = NULL;
 
 	return nombreDispositivo;
 }

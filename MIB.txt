@@ -190,4 +190,3 @@ nombrePersona OBJECT-TYPE
 	::={ filaTablaRevisiones 2 }
 
 END
-
