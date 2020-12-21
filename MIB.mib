@@ -67,12 +67,12 @@ filaTablaHistoricos OBJECT-TYPE
 
 EntradaTablaHistoricos ::=
 	SEQUENCE{
-		diaAno OCTET STRING,
+		diaAno INTEGER,
 		nEntradas INTEGER,
 		nSalidas INTEGER}
 
 diaAno OBJECT-TYPE
-	SYNTAX OCTET STRING
+	SYNTAX INTEGER
 	ACCESS read-only
 	STATUS current
 	DESCRIPTION
@@ -170,11 +170,11 @@ filaTablaRevisiones OBJECT-TYPE
 
 EntradaTablaRevisiones ::=
 	SEQUENCE{
-		dia OCTET STRING,
+		dia INTEGER,
 		nombrePersona OCTET STRING}
 
 dia OBJECT-TYPE
-	SYNTAX OCTET STRING
+	SYNTAX INTEGER
 	ACCESS read-only
 	STATUS current
 	DESCRIPTION

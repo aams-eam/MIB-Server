@@ -1,0 +1,20 @@
+- (*M*) Construya la MIB que define la información gestionada por el agente. Defina
+todos los objetos dentro de la rama experimental, que posee el OID 1.3.6.1.3.
+Sustituya grupo por nombre (cada alumno dispondrá así de una rama distinta dentro
+del nodo ‘experimental’).
+
+- Incluya objetos que piense que podrían mejorar la gestión del dispositivo.
+
+- (*M*) Compile la MIB y compruebe que es correcta.
+
+- (*M*) Cree un proyecto con el nombre ag_<grupo>, sustituyendo <grupo> por su
+nombre; el fichero fuente creado debería tener la extensión .cpp.
+
+- (*M*) Implemente la funcionalidad de un servidor UDP. El puerto en el que se
+escucha debe ser configurable, bien en el programa, bien como parámetro de
+llamada.
+
+- (*M*) Carga de la MIB estáticamente.
+
+
+
