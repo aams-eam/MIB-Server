@@ -115,7 +115,7 @@ void print_hex(const char* buff, unsigned int l);
 void read_integer(const char* buff, uint8_t L, nvalor* V);
 void read_octetstring(const char* buff, uint8_t L, nvalor* V);
 void read_oid(const char* buff, uint8_t L, nvalor* V);
-void final_oid(char* oid, const char* cad, uint8_t L);
+void final_oid(char* oid, const uint8_t* cad, uint8_t L);
 uint16_t read_tlv(const char* buff, uint8_t* T, uint8_t* L, nvalor* V);
 nodo* buscarOID(nodo* MIB, char* oid);
 nodo* buscarNextOID(nodo* MIB, char* oid);
@@ -168,7 +168,7 @@ int main(int argc, char* argv[])
 		/* WinSock DLL.                                  */
 		return -1;
 	}
-	LOGP("Sockets de Windows inicializados\n");
+	LOGP("Sockets de Windows inicializados\n\n");
 
 	// cout << wVersionRequested << " Versionrequested" << endl;
 
@@ -205,7 +205,7 @@ int main(int argc, char* argv[])
 		//recibimos la peticion
 		slen = sizeof(struct sockaddr_in);
 		l = recvfrom(s, buff, MAX_MENSAJE_SNMP, 0, (struct sockaddr*)&dest, &slen);
-		cout << "Message received from: " << ntohs(dest.sin_port) << endl;
+		cout << l << " bytes received from 127.0.0.1:" << ntohs(dest.sin_port) << endl;
 		if (l == SOCKET_ERROR && l < MAX_MENSAJE_SNMP) {
 			LOGP("Error recvfrom\n");
 			closesocket(s);
@@ -233,7 +233,7 @@ int main(int argc, char* argv[])
 
 		// version
 		index += read_tlv(&buff[index], &T, &L, &V);
-		cout << int(T) << " " << int(L) << " " << int(V.val.val_int) << endl;
+		cout << "Version:\t\t" << int(V.val.val_int) << endl;
 		if (V.val.val_int != 0) {
 			cout << "Este agente solo soporta SNMP version1" << endl;
 		}
@@ -242,7 +242,7 @@ int main(int argc, char* argv[])
 			// CommunityString
 			index += read_tlv(&buff[index], &T, &L, &V);
 			ain[1] = index; // guarda posicion de byte T de SNMP PDU
-			cout << int(T) << " " << int(L) << " " << V.val.val_cad << endl;
+			cout << "Community string:\t" << V.val.val_cad << endl;
 
 			if (strcmp(V.val.val_cad, "public") != 0) {
 				cout << "Community String is not 'public'" << endl;
@@ -257,19 +257,31 @@ int main(int argc, char* argv[])
 				else {
 
 					operation = T;
+					cout << "operation:\t\t";
+					switch(operation){
+						case 160:
+							cout << "Get" << endl;
+						break;
+
+						case 161:
+							cout << "GetNext" << endl;
+							break;
+
+						case 163:
+							cout << "Set" << endl;
+							break;
+					}
 
 					// RequestID
 					index += read_tlv(&buff[index], &T, &L, &V);
-					cout << int(T) << " " << int(L) << " " << V.val.val_int << endl;
 					rid = V.val.val_int;
+					cout << "RequestID:\t\t" << rid << endl;
 
 					// Error
 					index += read_tlv(&buff[index], &T, &L, &V);
-					cout << int(T) << " " << int(L) << " " << V.val.val_int << endl;
 
 					// ErrorIndex
 					index += read_tlv(&buff[index], &T, &L, &V);
-					cout << int(T) << " " << int(L) << " " << V.val.val_int << endl;
 
 					//guarda posiciones del byte T de VarBindList y VarBind
 					ain[2] = index;
@@ -279,18 +291,18 @@ int main(int argc, char* argv[])
 
 					// ObjectIdentifier
 					index += read_tlv(&buff[index], &T, &L, &V);
-					cout << int(T) << " " << int(L) << " ";
-					cout << "OID ";
+					
+					cout << "ObjectIDentifier:\t";
+					final_oid(oid, (uint8_t *)V.val.val_cad, L);
+					cout << oid << endl;
 
-					final_oid(oid, V.val.val_cad, L);
-
-					cout << oid << endl << endl;
+					exit(0);
 
 					VarBindList = index; // Guarda la posicion del primer valor para luego modificarlo más facilmente
 
 					// Value
 					index += read_tlv(&buff[index], &T, &L, &V);
-					cout << int(T) << " " << int(L) << " ";
+					cout << "Value: ";
 					if (T == 5) {
 						cout << "NULL";
 					}
@@ -300,8 +312,7 @@ int main(int argc, char* argv[])
 					else {
 						cout << V.val.val_cad << endl;
 					}
-
-					cout << int(uint8_t(buff[ain[0] + 1])) << " " << int(uint8_t(buff[ain[1] + 1]));
+					cout << endl;
 
 					l = create_response(MIB, rid, operation, oid, buff, l, VarBindList, T, V, error, &ain[0], s);
 
@@ -310,9 +321,8 @@ int main(int argc, char* argv[])
 		}
 
 		//enviamos la respuesta
-		cout << "message SENT to: " << ntohs(dest.sin_port) << endl;
 		int ret = sendto(s, buff, l, 0, (const struct sockaddr*)&dest, (socklen_t)sizeof(dest));
-		cout << "NUM BYTES SENT" << ret << endl;
+		cout << ret << " bytes sent to 127.0.0.1:" << ntohs(dest.sin_port) << endl;
 
 	}
 
@@ -398,13 +408,17 @@ void read_oid(const char* buff, uint8_t L, nvalor* V) {
 * Dada la cadena cad con los bytes del oid, introduce en la cadena oid el oid correspondiente
 * preparado para sacarlo por pantalla.
 */
-void final_oid(char* oid, const char* cad, uint8_t L) {
+void final_oid(char* oid, const uint8_t* cad, uint8_t L) {
 
 	char temp[8];
 
 	int x = int(cad[0]) / 40;
 	int  y = int(cad[0]) - (x * 40);
 	sprintf(oid, "%d.%d.", x, y);
+
+	cout << endl << "DEBUG FINAL_OID FUNCTION: " << endl;
+
+	// TEMP *** con números mayores de 127 en el oid no los pasa caracter bien
 
 	for (int i = 1; i < L; i++) {
 
@@ -441,9 +455,9 @@ uint16_t read_tlv(const char* buff, uint8_t* T, uint8_t* L, nvalor* V) {
 		read_integer(&buff[index], *L, V);
 		index += *L;
 		break;
+
 		// OCTET STRING (0x04)
 	case 4:
-		cout << "OCTET STRING" << endl;
 		read_octetstring(&buff[index], *L, V);
 		index += *L;
 		break;
@@ -454,7 +468,6 @@ uint16_t read_tlv(const char* buff, uint8_t* T, uint8_t* L, nvalor* V) {
 
 		// OID (0x06)
 	case 6:
-		cout << "OBJECT IDENTIFIER" << endl;
 		read_oid(&buff[index], *L, V);
 		index += *L;
 		break;
@@ -468,17 +481,14 @@ uint16_t read_tlv(const char* buff, uint8_t* T, uint8_t* L, nvalor* V) {
 		// SNMP OPERATIONS
 		// GET (0xA0)
 	case 160:
-		cout << "SNMP GET OPERATION" << endl;
 		break;
 
 		// GETNEXT (0xA1)
 	case 161:
-		cout << "SNMP GETNEXT OPERATION" << endl;
 		break;
 
 		// SET (0xA3)
 	case 163:
-		cout << "SNMP SET OPERATION" << endl;
 		break;
 
 	default:
