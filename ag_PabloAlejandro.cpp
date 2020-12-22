@@ -90,7 +90,7 @@ typedef struct nodo
 	int tipo_obj;  /* escalar (0), nodo tabla (1), nodo fila (2),
 					nodo columna (3) */
 	int tipo_de_dato;  /* valores posibles, ej: INTEGER (0),
-						OCTET STRING (1), ... */
+						OCTET STRING (1), IPADDRESS (2) */
 	int acceso;    /* valores posibles, ej: not-accessible (0),
 					read-only (1), read-write (2) */
 					/* La cláusula STATUS no se guarda porque sólo se almacenan los
@@ -266,7 +266,7 @@ int main(int argc, char* argv[])
 	personasSalen->indice = NULL;
 
 	ipDisp->tipo_obj = 0;
-	ipDisp->tipo_de_dato = 1;
+	ipDisp->tipo_de_dato = 2;
 	ipDisp->acceso = 1;
 	memset(ipDisp->oid, '\0', MAX_MENSAJE_SNMP);
 	memset(ipDisp->instancia, '\0', MAX_MENSAJE_SNMP);
@@ -277,9 +277,8 @@ int main(int argc, char* argv[])
 	temp[1] = 0;
 	temp[2] = 0;
 	temp[3] = 1;
-	ipDisp->tipo_valor.val.val_cad = (char *) malloc(4);
-	memcpy(ipDisp->tipo_valor.val.val_cad, temp, 4); // TEMP *** para codificarlo como si fuera una ip
-	// ipDisp->tipo_valor.val.val_cad = (char*)"192.168.1.2";
+	ipDisp->tipo_valor.val.val_cad = (char *)malloc(sizeof(temp));
+	memcpy(ipDisp->tipo_valor.val.val_cad, temp, sizeof(temp));
 	ipDisp->tipo_valor.sig_fila = NULL;
 	ipDisp->tipo_valor.sig_col = NULL;
 	ipDisp->sig = tablaHistoricos;
@@ -343,7 +342,7 @@ int main(int argc, char* argv[])
 	memset(nEntradas[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nEntradas[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nEntradas[0].oid, "1.3.6.1.3.53.9.6.1.2");
-	strcpy(nEntradas[0].instancia, "1.3.6.1.3.53.9.6.1.1.100");
+	strcpy(nEntradas[0].instancia, "1.3.6.1.3.53.9.6.1.2.100");
 	nEntradas[0].tipo_valor.val.val_int = 3;
 	nEntradas[0].tipo_valor.sig_fila = &nEntradas[1].tipo_valor;
 	nEntradas[0].tipo_valor.sig_col = &nSalidas[0].tipo_valor;
@@ -356,7 +355,7 @@ int main(int argc, char* argv[])
 	memset(nEntradas[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nEntradas[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nEntradas[1].oid, "1.3.6.1.3.53.9.6.1.2");
-	strcpy(nEntradas[1].instancia, "1.3.6.1.3.53.9.6.1.1.127");
+	strcpy(nEntradas[1].instancia, "1.3.6.1.3.53.9.6.1.2.127");
 	nEntradas[1].tipo_valor.val.val_int = 4;
 	nEntradas[1].tipo_valor.sig_fila = NULL;
 	nEntradas[1].tipo_valor.sig_col = &nSalidas[1].tipo_valor;
@@ -369,7 +368,7 @@ int main(int argc, char* argv[])
 	memset(nSalidas[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nSalidas[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nSalidas[0].oid, "1.3.6.1.3.53.9.6.1.3");
-	strcpy(nSalidas[0].instancia, "1.3.6.1.3.53.9.6.1.1.100");
+	strcpy(nSalidas[0].instancia, "1.3.6.1.3.53.9.6.1.3.100");
 	nSalidas[0].tipo_valor.val.val_int = 5;
 	nSalidas[0].tipo_valor.sig_fila = &nSalidas[1].tipo_valor;
 	nSalidas[0].tipo_valor.sig_col = NULL;
@@ -382,7 +381,7 @@ int main(int argc, char* argv[])
 	memset(nSalidas[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(nSalidas[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(nSalidas[1].oid, "1.3.6.1.3.53.9.6.1.3");
-	strcpy(nSalidas[1].instancia, "1.3.6.1.3.53.9.6.1.1.127");
+	strcpy(nSalidas[1].instancia, "1.3.6.1.3.53.9.6.1.3.127");
 	nSalidas[1].tipo_valor.val.val_int = 6;
 	nSalidas[1].tipo_valor.sig_fila = NULL;
 	nSalidas[1].tipo_valor.sig_col = NULL;
@@ -416,26 +415,38 @@ int main(int argc, char* argv[])
 	filaTablaDispositivos.indice = ipDispositivo;
 
 	ipDispositivo[0].tipo_obj = 4;
-	ipDispositivo[0].tipo_de_dato = 1;
+	ipDispositivo[0].tipo_de_dato = 2;
 	ipDispositivo[0].acceso = 1;
 	memset(ipDispositivo[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(ipDispositivo[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(ipDispositivo[0].oid, "1.3.6.1.3.53.9.7.1.1");
-	strcpy(ipDispositivo[0].instancia, "1.3.6.1.3.53.9.7.1.1.192.168.1.3");
-	ipDispositivo[0].tipo_valor.val.val_cad = (char*)"192.168.1.3";
+	strcpy(ipDispositivo[0].instancia, "1.3.6.1.3.53.9.7.1.1.100.10.1.3");
+	temp[4];
+	temp[0] = 100;
+	temp[1] = 10;
+	temp[2] = 1;
+	temp[3] = 3;
+	ipDispositivo[0].tipo_valor.val.val_cad = (char*)malloc(sizeof(temp));
+	memcpy(ipDispositivo[0].tipo_valor.val.val_cad, temp, sizeof(temp));
 	ipDispositivo[0].tipo_valor.sig_fila = &ipDispositivo[1].tipo_valor;
 	ipDispositivo[0].tipo_valor.sig_col = &modeloDispositivo[0].tipo_valor;
 	ipDispositivo[0].sig = &ipDispositivo[1];
 	ipDispositivo[0].indice = NULL;
 
 	ipDispositivo[1].tipo_obj = 4;
-	ipDispositivo[1].tipo_de_dato = 1;
+	ipDispositivo[1].tipo_de_dato = 2;
 	ipDispositivo[1].acceso = 1;
 	memset(ipDispositivo[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(ipDispositivo[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(ipDispositivo[1].oid, "1.3.6.1.3.53.9.7.1.1");
-	strcpy(ipDispositivo[1].instancia, "1.3.6.1.3.53.9.7.1.1.192.168.1.4");
-	ipDispositivo[1].tipo_valor.val.val_cad = (char*)"192.168.1.4";
+	strcpy(ipDispositivo[1].instancia, "1.3.6.1.3.53.9.7.1.1.92.93.1.4");
+	temp[4];
+	temp[0] = 92;
+	temp[1] = 93;
+	temp[2] = 1;
+	temp[3] = 4;
+	ipDispositivo[1].tipo_valor.val.val_cad = (char*)malloc(sizeof(temp));
+	memcpy(ipDispositivo[1].tipo_valor.val.val_cad, temp, sizeof(temp));
 	ipDispositivo[1].tipo_valor.sig_fila = NULL;
 	ipDispositivo[1].tipo_valor.sig_col = &modeloDispositivo[1].tipo_valor;
 	ipDispositivo[1].sig = &modeloDispositivo[0];
@@ -447,7 +458,7 @@ int main(int argc, char* argv[])
 	memset(modeloDispositivo[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(modeloDispositivo[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(modeloDispositivo[0].oid, "1.3.6.1.3.53.9.7.1.2");
-	strcpy(modeloDispositivo[0].instancia, "1.3.6.1.3.53.9.7.1.2.192.168.1.3");
+	strcpy(modeloDispositivo[0].instancia, "1.3.6.1.3.53.9.7.1.2.100.10.1.3");
 	modeloDispositivo[0].tipo_valor.val.val_int = 1;
 	modeloDispositivo[0].tipo_valor.sig_fila = &modeloDispositivo[1].tipo_valor;
 	modeloDispositivo[0].tipo_valor.sig_col = &tipoTarjeta[0].tipo_valor;
@@ -460,7 +471,7 @@ int main(int argc, char* argv[])
 	memset(modeloDispositivo[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(modeloDispositivo[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(modeloDispositivo[1].oid, "1.3.6.1.3.53.9.7.1.2");
-	strcpy(modeloDispositivo[1].instancia, "1.3.6.1.3.53.9.7.1.2.192.168.1.4");
+	strcpy(modeloDispositivo[1].instancia, "1.3.6.1.3.53.9.7.1.2.92.93.1.4");
 	modeloDispositivo[1].tipo_valor.val.val_int = 2;
 	modeloDispositivo[1].tipo_valor.sig_fila = NULL;
 	modeloDispositivo[1].tipo_valor.sig_col = &tipoTarjeta[1].tipo_valor;
@@ -473,7 +484,7 @@ int main(int argc, char* argv[])
 	memset(tipoTarjeta[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(tipoTarjeta[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(tipoTarjeta[0].oid, "1.3.6.1.3.53.9.7.1.3");
-	strcpy(tipoTarjeta[0].instancia, "1.3.6.1.3.53.9.7.1.3.192.168.1.3");
+	strcpy(tipoTarjeta[0].instancia, "1.3.6.1.3.53.9.7.1.3.100.10.1.3");
 	tipoTarjeta[0].tipo_valor.val.val_int = 1;
 	tipoTarjeta[0].tipo_valor.sig_fila = &tipoTarjeta[1].tipo_valor;
 	tipoTarjeta[0].tipo_valor.sig_col = &fechaInstalacion[0].tipo_valor;
@@ -486,7 +497,7 @@ int main(int argc, char* argv[])
 	memset(tipoTarjeta[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(tipoTarjeta[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(tipoTarjeta[1].oid, "1.3.6.1.3.53.9.7.1.3");
-	strcpy(tipoTarjeta[1].instancia, "1.3.6.1.3.53.9.7.1.3.192.168.1.4");
+	strcpy(tipoTarjeta[1].instancia, "1.3.6.1.3.53.9.7.1.3.92.93.1.4");
 	tipoTarjeta[1].tipo_valor.val.val_int = 2;
 	tipoTarjeta[1].tipo_valor.sig_fila = NULL;
 	tipoTarjeta[1].tipo_valor.sig_col = &fechaInstalacion[1].tipo_valor;
@@ -499,7 +510,7 @@ int main(int argc, char* argv[])
 	memset(fechaInstalacion[0].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(fechaInstalacion[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(fechaInstalacion[0].oid, "1.3.6.1.3.53.9.7.1.4");
-	strcpy(fechaInstalacion[0].instancia, "1.3.6.1.3.53.9.7.1.4.192.168.1.3");
+	strcpy(fechaInstalacion[0].instancia, "1.3.6.1.3.53.9.7.1.4.100.10.1.3");
 	fechaInstalacion[0].tipo_valor.val.val_cad = (char*)"20-12-20";
 	fechaInstalacion[0].tipo_valor.sig_fila = &fechaInstalacion[1].tipo_valor;
 	fechaInstalacion[0].tipo_valor.sig_col = NULL;
@@ -512,7 +523,7 @@ int main(int argc, char* argv[])
 	memset(fechaInstalacion[1].oid, '\0', MAX_MENSAJE_SNMP);
 	memset(fechaInstalacion[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(fechaInstalacion[1].oid, "1.3.6.1.3.53.9.7.1.4");
-	strcpy(fechaInstalacion[1].instancia, "1.3.6.1.3.53.9.7.1.4.192.168.1.4");
+	strcpy(fechaInstalacion[1].instancia, "1.3.6.1.3.53.9.7.1.4.92.93.1.4");
 	fechaInstalacion[1].tipo_valor.val.val_cad = (char*)"21-12-20";
 	fechaInstalacion[1].tipo_valor.sig_fila = NULL;
 	fechaInstalacion[1].tipo_valor.sig_col = NULL;
@@ -749,6 +760,7 @@ void print_hex(const char* buff, unsigned int l) {
 	uint8_t c;
 
 	for (unsigned i = 0; i < l; i++) {
+
 		c = (uint8_t)buff[i];
 		cout << unsigned(c >> 4) << unsigned(c & 15) << " ";
 		if (unsigned(c >> 4) > 15) {
@@ -1119,10 +1131,23 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 
 				//ponemos el tipo a GetResponse (162)
 				buff[ain[1]] = uint8_t(162);
-			}
-			else { // cualquier otro tipo se trata como cadena
+			}else if (valtype == 2) { // direccion Ip
 
-				buff[VBL] = 4; // TEMP *** PABLO Aquí indicar el tipo que es OCTET STRING, IP LO QUE SEA, ETC.
+				buff[VBL] = 64;
+				V.val.val_cad = auxiliar->tipo_valor.val.val_cad;
+				cout << V.val.val_cad[0] << " . " << V.val.val_cad[3] << endl;
+				buff[VBL + 1] = 4;
+				added = uint16_t(buff[VBL + 1]);
+				memcpy(&buff[VBL + 2], V.val.val_cad, added);
+
+				// sumamos los valores añadidos a las longitudes, en ain tenemos la posicion de los Type, así que le sumamos 1
+				for (int i = 0; i < 4; i++) {
+					buff[ain[i] + 1] = uint8_t(buff[ain[i] + 1]) + added;
+				}
+
+			}else { // cualquier otro tipo se trata como cadena
+
+				buff[VBL] = 4;
 				V.val.val_cad = auxiliar->tipo_valor.val.val_cad;
 				buff[VBL + 1] = strlen(V.val.val_cad);
 				added = uint16_t(buff[VBL + 1]);
@@ -1162,21 +1187,21 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 
 				buff[VBL] = 2; // indicamos que es de tipo int
 				// vemos cuantos bytes necesita ese int
-				buff[VBL + 1] = 1; // TEMP *** PABLO aquí ver la cantidad de bytes que se necesitan para el integer y cambiarla por el 1 que hay = 1 por = long;
+				buff[VBL + 1] = 1;
 				added = uint16_t(buff[VBL + 1]);
 				V.val.val_int = auxiliar->tipo_valor.val.val_int;
 				buff[VBL + 2] = uint8_t(V.val.val_int);
 
 				//codificamos el valor del oid siguiente al que hemos hecho GetNext
-				oidlong = oidToBytes(auxiliar->oid, bytesoid);
+				oidlong = oidToBytes(auxiliar->instancia, bytesoid);
 
 				// copiamos el buffer en un buffer temporal
 				memcpy(bufftemp, buff, l + added);
 				
 				// desplazamos el valor la cantidad de bytes añadidos si añadiesemos el nuevo oid
 				int loidpos= ain[3]+3;
-				memcpy(&buff[loidpos + oidlong], &bufftemp[loidpos+int(bufftemp[loidpos])], l+added-(loidpos+int(bufftemp[loidpos])));
-				
+				memcpy(&buff[loidpos + oidlong+1], &bufftemp[loidpos+int(bufftemp[loidpos])+1], 2+added);
+
 				// introducimos el nuevo oid
 				memcpy(&buff[loidpos + 1], &bytesoid, oidlong);
 
@@ -1188,8 +1213,42 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 					buff[ain[i] + 1] = uint8_t(buff[ain[i] + 1]) + added;
 				}
 
+				buff[loidpos] = oidlong;
+
 				//ponemos el tipo a GetResponse (162)
 				buff[ain[1]] = uint8_t(162);
+
+			}
+			else if (valtype == 2) { // direccion Ip
+
+				buff[VBL] = 64; // TEMP *** PABLO Aquí indicar el tipo que es OCTET STRING, IP LO QUE SEA, ETC.
+				V.val.val_cad = auxiliar->tipo_valor.val.val_cad;
+				buff[VBL + 1] = 4;
+				added = uint16_t(buff[VBL + 1]);
+				memcpy(&buff[VBL + 2], V.val.val_cad, added);
+
+				//codificamos el valor del oid siguiente al que hemos hecho GetNext
+				oidlong = oidToBytes(auxiliar->instancia, bytesoid);
+
+				// copiamos el buffer en un buffer temporal
+				memcpy(bufftemp, buff, l + added);
+
+				// desplazamos el valor la cantidad de bytes añadidos si añadiesemos el nuevo oid
+				int loidpos = ain[3] + 3;
+				memcpy(&buff[loidpos + oidlong + 1], &bufftemp[loidpos + int(bufftemp[loidpos]) + 1], 2 + added);
+
+				// introducimos el nuevo oid
+				memcpy(&buff[loidpos + 1], &bytesoid, oidlong);
+
+				//añadimos la longitud que hemos introducido al meter el nuevo oid, o la que hemos quitado
+				added += oidlong - int(buff[loidpos]);
+
+				// sumamos los valores añadidos a las longitudes, en ain tenemos la posicion de los Type, así que le sumamos 1
+				for (int i = 0; i < 4; i++) {
+					buff[ain[i] + 1] = uint8_t(buff[ain[i] + 1]) + added;
+				}
+
+				buff[loidpos] = oidlong;
 
 			}
 			else { // cualquier otro tipo se trata como cadena
@@ -1201,14 +1260,14 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 				memcpy(&buff[VBL + 2], V.val.val_cad, added);
 
 				//codificamos el valor del oid siguiente al que hemos hecho GetNext
-				oidlong = oidToBytes(auxiliar->oid, bytesoid);
+				oidlong = oidToBytes(auxiliar->instancia, bytesoid);
 
 				// copiamos el buffer en un buffer temporal
 				memcpy(bufftemp, buff, l + added);
 
 				// desplazamos el valor la cantidad de bytes añadidos si añadiesemos el nuevo oid
 				int loidpos = ain[3] + 3;
-				memcpy(&buff[loidpos + oidlong], &bufftemp[loidpos + int(bufftemp[loidpos])], l + added - (loidpos + int(bufftemp[loidpos])));
+				memcpy(&buff[loidpos + oidlong + 1], &bufftemp[loidpos + int(bufftemp[loidpos]) + 1], 2 + added);
 
 				// introducimos el nuevo oid
 				memcpy(&buff[loidpos + 1], &bytesoid, oidlong);
@@ -1220,6 +1279,8 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 				for (int i = 0; i < 4; i++) {
 					buff[ain[i] + 1] = uint8_t(buff[ain[i] + 1]) + added;
 				}
+
+				buff[loidpos] = oidlong;
 			}
 		}
 
@@ -1288,411 +1349,8 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 		break;
 	}
 
+	print_hex(buff, l + added);
+
 	return l + added;
 
-}
-
-/*
-* Método para cargar la MIB en el agente
-*/
-
-nodo* loadMIB() {
-	nodo* nombreDispositivo = NULL, * personaContacto = NULL, * personasEntran, * personasSalen, * ipDisp,
-		* tablaHistoricos, filaTablaHistoricos, diaAno[2], nEntradas[2], nSalidas[2],
-		tablaDispositivos, filaTablaDispositivos, ipDispositivo[2], modeloDispositivo[2], tipoTarjeta[2], fechaInstalacion[2],
-		tablaRevisiones, filaTablaRevisiones, dia[2], nombrePersona[2];
-
-	nombreDispositivo = (nodo*)malloc(sizeof(nodo));
-	personaContacto = (nodo*)malloc(sizeof(nodo));
-	personasEntran = (nodo*)malloc(sizeof(nodo));
-	personasSalen = (nodo*)malloc(sizeof(nodo));
-	ipDisp = (nodo*)malloc(sizeof(nodo));
-	tablaHistoricos = (nodo*)malloc(sizeof(nodo));
-
-	nombreDispositivo->tipo_obj = 0;
-	nombreDispositivo->tipo_de_dato = 1;
-	nombreDispositivo->acceso = 1;
-	memset(nombreDispositivo->oid, '\0', MAX_MENSAJE_SNMP);
-	memset(nombreDispositivo->instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(nombreDispositivo->oid, "1.3.6.1.3.53.9.1");
-	strcpy(nombreDispositivo->instancia, "1.3.6.1.3.53.9.1.0");
-	nombreDispositivo->tipo_valor.val.val_cad = (char*)"Gestor de seguridad";
-	nombreDispositivo->tipo_valor.sig_fila = NULL;
-	nombreDispositivo->tipo_valor.sig_col = NULL;
-	nombreDispositivo->sig = personaContacto;
-	nombreDispositivo->indice = NULL;
-
-	personaContacto->tipo_obj = 0;
-	personaContacto->tipo_de_dato = 1;
-	personaContacto->acceso = 1;
-	memset(personaContacto->oid, '\0', MAX_MENSAJE_SNMP);
-	memset(personaContacto->instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(personaContacto->oid, "1.3.6.1.3.53.9.2");
-	strcpy(personaContacto->instancia, "1.3.6.1.3.53.9.2.0");
-	personaContacto->tipo_valor.val.val_cad = (char*)"Chema Alonso";
-	personaContacto->tipo_valor.sig_fila = NULL;
-	personaContacto->tipo_valor.sig_col = NULL;
-	personaContacto->sig = personasEntran;
-	personaContacto->indice = NULL;
-
-
-	// TEMP *** Hace falta poner el min_bound y max_bound en el resto de valores que no son 
-	// de tipo INTEGER?
-	personasEntran->tipo_obj = 0;
-	personasEntran->tipo_de_dato = 0;
-	personasEntran->acceso = 2;
-	memset(personasEntran->oid, '\0', MAX_MENSAJE_SNMP);
-	memset(personasEntran->instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(personasEntran->oid, "1.3.6.1.3.53.9.3");
-	strcpy(personasEntran->instancia, "1.3.6.1.3.53.9.3.0");
-	personasEntran->tipo_valor.val.val_int = 10;
-	personasEntran->tipo_valor.sig_fila = NULL;
-	personasEntran->tipo_valor.sig_col = NULL;
-	personasEntran->min_bound = 3;
-	personasEntran->max_bound = 50;
-	personasEntran->sig = personasSalen;
-	personasEntran->indice = NULL;
-
-	personasSalen->tipo_obj = 0;
-	personasSalen->tipo_de_dato = 0;
-	personasSalen->acceso = 2;
-	memset(personasSalen->oid, '\0', MAX_MENSAJE_SNMP);
-	memset(personasSalen->instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(personasSalen->oid, "1.3.6.1.3.53.9.4");
-	strcpy(personasSalen->instancia, "1.3.6.1.3.53.9.4.0");
-	personasSalen->tipo_valor.val.val_int = 7;
-	personasSalen->tipo_valor.sig_fila = NULL;
-	personasSalen->tipo_valor.sig_col = NULL;
-	personasSalen->min_bound = 10;
-	personasSalen->max_bound = 30;
-	personasSalen->sig = ipDisp;
-	personasSalen->indice = NULL;
-
-	ipDisp->tipo_obj = 0;
-	ipDisp->tipo_de_dato = 1;
-	ipDisp->acceso = 1;
-	memset(ipDisp->oid, '\0', MAX_MENSAJE_SNMP);
-	memset(ipDisp->instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(ipDisp->oid, "1.3.6.1.3.53.9.5");
-	strcpy(ipDisp->instancia, "1.3.6.1.3.53.9.5.0");
-	ipDisp->tipo_valor.val.val_cad = (char*)"192.168.1.2";
-	ipDisp->tipo_valor.sig_fila = NULL;
-	ipDisp->tipo_valor.sig_col = NULL;
-	ipDisp->sig = tablaHistoricos;
-	ipDisp->indice = NULL;
-
-	tablaHistoricos->tipo_obj = 1;
-	tablaHistoricos->tipo_de_dato = NULL;
-	tablaHistoricos->acceso = 0;
-	memset(tablaHistoricos->oid, '\0', MAX_MENSAJE_SNMP);
-	memset(tablaHistoricos->instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(tablaHistoricos->oid, "1.3.6.1.3.53.9.6");
-	strcpy(tablaHistoricos->instancia, "");
-	tablaHistoricos->tipo_valor.val.val_cad = (char*)"";
-	tablaHistoricos->tipo_valor.sig_fila = NULL;
-	tablaHistoricos->tipo_valor.sig_col = NULL;
-	tablaHistoricos->sig = &filaTablaHistoricos;
-	tablaHistoricos->indice = NULL;
-
-	filaTablaHistoricos.tipo_obj = 2;
-	filaTablaHistoricos.tipo_de_dato = NULL;
-	filaTablaHistoricos.acceso = 0;
-	memset(filaTablaHistoricos.oid, '\0', MAX_MENSAJE_SNMP);
-	memset(filaTablaHistoricos.instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(filaTablaHistoricos.oid, "1.3.6.1.3.53.9.6.1");
-	strcpy(filaTablaHistoricos.instancia, "");
-	filaTablaHistoricos.tipo_valor.val.val_cad = (char*)"";
-	filaTablaHistoricos.tipo_valor.sig_fila = NULL;
-	filaTablaHistoricos.tipo_valor.sig_col = NULL;
-	filaTablaHistoricos.sig = &diaAno[0];
-	filaTablaHistoricos.indice = diaAno;
-
-	diaAno[0].tipo_obj = 4;
-	diaAno[0].tipo_de_dato = 0;
-	diaAno[0].acceso = 1;
-	memset(diaAno[0].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(diaAno[0].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(diaAno[0].oid, "1.3.6.1.3.53.9.6.1.1");
-	strcpy(diaAno[0].instancia, "1.3.6.1.3.53.9.6.1.1.100");
-	diaAno[0].tipo_valor.val.val_int = 100;
-	diaAno[0].tipo_valor.sig_fila = &diaAno[1].tipo_valor;
-	diaAno[0].tipo_valor.sig_col = &nEntradas[0].tipo_valor;
-	diaAno[0].sig = &diaAno[1];
-	diaAno[0].indice = NULL;
-
-	diaAno[1].tipo_obj = 4;
-	diaAno[1].tipo_de_dato = 0;
-	diaAno[1].acceso = 1;
-	memset(diaAno[1].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(diaAno[1].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(diaAno[1].oid, "1.3.6.1.3.53.9.6.1.1");
-	strcpy(diaAno[1].instancia, "1.3.6.1.3.53.9.6.1.1.127");
-	diaAno[1].tipo_valor.val.val_int = 127;
-	diaAno[1].tipo_valor.sig_fila = NULL;
-	diaAno[1].tipo_valor.sig_col = &nEntradas[1].tipo_valor;
-	diaAno[1].sig = &nEntradas[0];
-	diaAno[1].indice = NULL;
-
-	nEntradas[0].tipo_obj = 4;
-	nEntradas[0].tipo_de_dato = 0;
-	nEntradas[0].acceso = 2;
-	memset(nEntradas[0].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(nEntradas[0].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(nEntradas[0].oid, "1.3.6.1.3.53.9.6.1.2");
-	strcpy(nEntradas[0].instancia, "1.3.6.1.3.53.9.6.1.1.100");
-	nEntradas[0].tipo_valor.val.val_int = 3;
-	nEntradas[0].tipo_valor.sig_fila = &nEntradas[1].tipo_valor;
-	nEntradas[0].tipo_valor.sig_col = &nSalidas[0].tipo_valor;
-	nEntradas[0].sig = &nEntradas[1];
-	nEntradas[0].indice = NULL;
-
-	nEntradas[1].tipo_obj = 4;
-	nEntradas[1].tipo_de_dato = 0;
-	nEntradas[1].acceso = 2;
-	memset(nEntradas[1].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(nEntradas[1].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(nEntradas[1].oid, "1.3.6.1.3.53.9.6.1.2");
-	strcpy(nEntradas[1].instancia, "1.3.6.1.3.53.9.6.1.1.127");
-	nEntradas[1].tipo_valor.val.val_int = 4;
-	nEntradas[1].tipo_valor.sig_fila = NULL;
-	nEntradas[1].tipo_valor.sig_col = &nSalidas[1].tipo_valor;
-	nEntradas[1].sig = &nSalidas[0];
-	nEntradas[1].indice = NULL;
-
-	nSalidas[0].tipo_obj = 4;
-	nSalidas[0].tipo_de_dato = 0;
-	nSalidas[0].acceso = 2;
-	memset(nSalidas[0].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(nSalidas[0].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(nSalidas[0].oid, "1.3.6.1.3.53.9.6.1.3");
-	strcpy(nSalidas[0].instancia, "1.3.6.1.3.53.9.6.1.1.100");
-	nSalidas[0].tipo_valor.val.val_int = 5;
-	nSalidas[0].tipo_valor.sig_fila = &nSalidas[1].tipo_valor;
-	nSalidas[0].tipo_valor.sig_col = NULL;
-	nSalidas[0].sig = &nSalidas[1];
-	nSalidas[0].indice = NULL;
-
-	nSalidas[1].tipo_obj = 4;
-	nSalidas[1].tipo_de_dato = 0;
-	nSalidas[1].acceso = 2;
-	memset(nSalidas[1].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(nSalidas[1].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(nSalidas[1].oid, "1.3.6.1.3.53.9.6.1.3");
-	strcpy(nSalidas[1].instancia, "1.3.6.1.3.53.9.6.1.1.127");
-	nSalidas[1].tipo_valor.val.val_int = 6;
-	nSalidas[1].tipo_valor.sig_fila = NULL;
-	nSalidas[1].tipo_valor.sig_col = NULL;
-	nSalidas[1].sig = &tablaDispositivos;
-	nSalidas[1].indice = NULL;
-
-	tablaDispositivos.tipo_obj = 1;
-	tablaDispositivos.tipo_de_dato = NULL;
-	tablaDispositivos.acceso = 0;
-	memset(tablaDispositivos.oid, '\0', MAX_MENSAJE_SNMP);
-	memset(tablaDispositivos.instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(tablaDispositivos.oid, "1.3.6.1.3.53.9.7");
-	strcpy(tablaDispositivos.instancia, "");
-	tablaDispositivos.tipo_valor.val.val_cad = (char*)"";
-	tablaDispositivos.tipo_valor.sig_fila = NULL;
-	tablaDispositivos.tipo_valor.sig_col = NULL;
-	tablaDispositivos.sig = &filaTablaDispositivos;
-	tablaDispositivos.indice = NULL;
-
-	filaTablaDispositivos.tipo_obj = 2;
-	filaTablaDispositivos.tipo_de_dato = NULL;
-	filaTablaDispositivos.acceso = 0;
-	memset(filaTablaDispositivos.oid, '\0', MAX_MENSAJE_SNMP);
-	memset(filaTablaDispositivos.instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(filaTablaDispositivos.oid, "1.3.6.1.3.53.9.7.1");
-	strcpy(filaTablaDispositivos.instancia, "");
-	filaTablaDispositivos.tipo_valor.val.val_cad = (char*)"";
-	filaTablaDispositivos.tipo_valor.sig_fila = NULL;
-	filaTablaDispositivos.tipo_valor.sig_col = NULL;
-	filaTablaDispositivos.sig = &ipDispositivo[0];
-	filaTablaDispositivos.indice = ipDispositivo;
-
-	ipDispositivo[0].tipo_obj = 4;
-	ipDispositivo[0].tipo_de_dato = 1;
-	ipDispositivo[0].acceso = 1;
-	memset(ipDispositivo[0].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(ipDispositivo[0].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(ipDispositivo[0].oid, "1.3.6.1.3.53.9.7.1.1");
-	strcpy(ipDispositivo[0].instancia, "1.3.6.1.3.53.9.7.1.1.192.168.1.3");
-	ipDispositivo[0].tipo_valor.val.val_cad = (char*)"192.168.1.3";
-	ipDispositivo[0].tipo_valor.sig_fila = &ipDispositivo[1].tipo_valor;
-	ipDispositivo[0].tipo_valor.sig_col = &modeloDispositivo[0].tipo_valor;
-	ipDispositivo[0].sig = &ipDispositivo[1];
-	ipDispositivo[0].indice = NULL;
-
-	ipDispositivo[1].tipo_obj = 4;
-	ipDispositivo[1].tipo_de_dato = 1;
-	ipDispositivo[1].acceso = 1;
-	memset(ipDispositivo[1].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(ipDispositivo[1].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(ipDispositivo[1].oid, "1.3.6.1.3.53.9.7.1.1");
-	strcpy(ipDispositivo[1].instancia, "1.3.6.1.3.53.9.7.1.1.192.168.1.4");
-	// TEMP cambiar el valor de los val_cad con ip para que sea un array de bytes con cada número un byte
-	ipDispositivo[1].tipo_valor.val.val_cad = (char*)"192.168.1.4";
-	ipDispositivo[1].tipo_valor.sig_fila = NULL;
-	ipDispositivo[1].tipo_valor.sig_col = &modeloDispositivo[1].tipo_valor;
-	ipDispositivo[1].sig = &modeloDispositivo[0];
-	ipDispositivo[1].indice = NULL;
-
-	modeloDispositivo[0].tipo_obj = 4;
-	modeloDispositivo[0].tipo_de_dato = 0;
-	modeloDispositivo[0].acceso = 2;
-	memset(modeloDispositivo[0].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(modeloDispositivo[0].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(modeloDispositivo[0].oid, "1.3.6.1.3.53.9.7.1.2");
-	strcpy(modeloDispositivo[0].instancia, "1.3.6.1.3.53.9.7.1.2.192.168.1.3");
-	modeloDispositivo[0].tipo_valor.val.val_int = 1;
-	modeloDispositivo[0].tipo_valor.sig_fila = &modeloDispositivo[1].tipo_valor;
-	modeloDispositivo[0].tipo_valor.sig_col = &tipoTarjeta[0].tipo_valor;
-	modeloDispositivo[0].sig = &modeloDispositivo[1];
-	modeloDispositivo[0].indice = NULL;
-
-	modeloDispositivo[1].tipo_obj = 4;
-	modeloDispositivo[1].tipo_de_dato = 0;
-	modeloDispositivo[1].acceso = 2;
-	memset(modeloDispositivo[1].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(modeloDispositivo[1].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(modeloDispositivo[1].oid, "1.3.6.1.3.53.9.7.1.2");
-	strcpy(modeloDispositivo[1].instancia, "1.3.6.1.3.53.9.7.1.2.192.168.1.4");
-	modeloDispositivo[1].tipo_valor.val.val_int = 2;
-	modeloDispositivo[1].tipo_valor.sig_fila = NULL;
-	modeloDispositivo[1].tipo_valor.sig_col = &tipoTarjeta[1].tipo_valor;
-	modeloDispositivo[1].sig = &tipoTarjeta[0];
-	modeloDispositivo[1].indice = NULL;
-
-	tipoTarjeta[0].tipo_obj = 4;
-	tipoTarjeta[0].tipo_de_dato = 0;
-	tipoTarjeta[0].acceso = 2;
-	memset(tipoTarjeta[0].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(tipoTarjeta[0].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(tipoTarjeta[0].oid, "1.3.6.1.3.53.9.7.1.3");
-	strcpy(tipoTarjeta[0].instancia, "1.3.6.1.3.53.9.7.1.3.192.168.1.3");
-	tipoTarjeta[0].tipo_valor.val.val_int = 1;
-	tipoTarjeta[0].tipo_valor.sig_fila = &tipoTarjeta[1].tipo_valor;
-	tipoTarjeta[0].tipo_valor.sig_col = &fechaInstalacion[0].tipo_valor;
-	tipoTarjeta[0].sig = &tipoTarjeta[1];
-	tipoTarjeta[0].indice = NULL;
-
-	tipoTarjeta[1].tipo_obj = 4;
-	tipoTarjeta[1].tipo_de_dato = 0;
-	tipoTarjeta[1].acceso = 2;
-	memset(tipoTarjeta[1].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(tipoTarjeta[1].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(tipoTarjeta[1].oid, "1.3.6.1.3.53.9.7.1.3");
-	strcpy(tipoTarjeta[1].instancia, "1.3.6.1.3.53.9.7.1.3.192.168.1.4");
-	tipoTarjeta[1].tipo_valor.val.val_int = 2;
-	tipoTarjeta[1].tipo_valor.sig_fila = NULL;
-	tipoTarjeta[1].tipo_valor.sig_col = &fechaInstalacion[1].tipo_valor;
-	tipoTarjeta[1].sig = &fechaInstalacion[0];
-	tipoTarjeta[1].indice = NULL;
-
-	fechaInstalacion[0].tipo_obj = 4;
-	fechaInstalacion[0].tipo_de_dato = 1;
-	fechaInstalacion[0].acceso = 2;
-	memset(fechaInstalacion[0].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(fechaInstalacion[0].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(fechaInstalacion[0].oid, "1.3.6.1.3.53.9.7.1.4");
-	strcpy(fechaInstalacion[0].instancia, "1.3.6.1.3.53.9.7.1.4.192.168.1.3");
-	fechaInstalacion[0].tipo_valor.val.val_cad = (char*)"20-12-20";
-	fechaInstalacion[0].tipo_valor.sig_fila = &fechaInstalacion[1].tipo_valor;
-	fechaInstalacion[0].tipo_valor.sig_col = NULL;
-	fechaInstalacion[0].sig = &fechaInstalacion[1];
-	fechaInstalacion[0].indice = NULL;
-
-	fechaInstalacion[1].tipo_obj = 4;
-	fechaInstalacion[1].tipo_de_dato = 1;
-	fechaInstalacion[1].acceso = 2;
-	memset(fechaInstalacion[1].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(fechaInstalacion[1].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(fechaInstalacion[1].oid, "1.3.6.1.3.53.9.7.1.4");
-	strcpy(fechaInstalacion[1].instancia, "1.3.6.1.3.53.9.7.1.4.192.168.1.4");
-	fechaInstalacion[1].tipo_valor.val.val_cad = (char*)"21-12-20";
-	fechaInstalacion[1].tipo_valor.sig_fila = NULL;
-	fechaInstalacion[1].tipo_valor.sig_col = NULL;
-	fechaInstalacion[1].sig = &tablaRevisiones;
-	fechaInstalacion[1].indice = NULL;
-
-	tablaRevisiones.tipo_obj = 1;
-	tablaRevisiones.tipo_de_dato = NULL;
-	tablaRevisiones.acceso = 0;
-	memset(tablaRevisiones.oid, '\0', MAX_MENSAJE_SNMP);
-	memset(tablaRevisiones.instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(tablaRevisiones.oid, "1.3.6.1.3.53.9.8");
-	strcpy(tablaRevisiones.instancia, "");
-	tablaRevisiones.tipo_valor.val.val_cad = (char*)"";
-	tablaRevisiones.tipo_valor.sig_fila = NULL;
-	tablaRevisiones.tipo_valor.sig_col = NULL;
-	tablaRevisiones.sig = &filaTablaRevisiones;
-	tablaRevisiones.indice = NULL;
-
-	filaTablaRevisiones.tipo_obj = 2;
-	filaTablaRevisiones.tipo_de_dato = NULL;
-	filaTablaRevisiones.acceso = 0;
-	memset(filaTablaRevisiones.oid, '\0', MAX_MENSAJE_SNMP);
-	memset(filaTablaRevisiones.instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(filaTablaRevisiones.oid, "1.3.6.1.3.53.9.8.1");
-	strcpy(filaTablaRevisiones.instancia, "");
-	filaTablaRevisiones.tipo_valor.val.val_cad = (char*)"";
-	filaTablaHistoricos.tipo_valor.sig_fila = NULL;
-	filaTablaHistoricos.tipo_valor.sig_col = NULL;
-	filaTablaHistoricos.sig = &dia[0];
-	filaTablaHistoricos.indice = dia;
-
-	dia[0].tipo_obj = 4;
-	dia[0].tipo_de_dato = 0;
-	dia[0].acceso = 1;
-	memset(dia[0].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(dia[0].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(dia[0].oid, "1.3.6.1.3.53.9.8.1.1");
-	strcpy(dia[0].instancia, "1.3.6.1.3.53.9.8.1.1.50");
-	dia[0].tipo_valor.val.val_int = 50;
-	dia[0].tipo_valor.sig_fila = NULL;
-	dia[0].tipo_valor.sig_col = NULL;
-	dia[0].sig = &dia[1];
-	dia[0].indice = NULL;
-
-	dia[1].tipo_obj = 4;
-	dia[1].tipo_de_dato = 0;
-	dia[1].acceso = 1;
-	memset(dia[1].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(dia[1].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(dia[1].oid, "1.3.6.1.3.53.9.8.1.1");
-	strcpy(dia[1].instancia, "1.3.6.1.3.53.9.8.1.1.120");
-	dia[1].tipo_valor.val.val_int = 120;
-	dia[1].tipo_valor.sig_fila = NULL;
-	dia[1].tipo_valor.sig_col = &nombrePersona[1].tipo_valor;
-	dia[1].sig = &nombrePersona[0];
-	dia[1].indice = NULL;
-
-	nombrePersona[0].tipo_obj = 4;
-	nombrePersona[0].tipo_de_dato = 1;
-	nombrePersona[0].acceso = 2;
-	memset(nombrePersona[0].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(nombrePersona[0].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(nombrePersona[0].oid, "1.3.6.1.3.53.9.8.1.2");
-	strcpy(nombrePersona[0].instancia, "1.3.6.1.3.53.9.8.1.2.50");
-	nombrePersona[0].tipo_valor.val.val_cad = (char*)"Alejandro Moreno";
-	nombrePersona[0].tipo_valor.sig_fila = &nombrePersona[1].tipo_valor;
-	nombrePersona[0].tipo_valor.sig_col = NULL;
-	nombrePersona[0].sig = &nombrePersona[1];
-	nombrePersona[0].indice = NULL;
-
-	nombrePersona[1].tipo_obj = 4;
-	nombrePersona[1].tipo_de_dato = 1;
-	nombrePersona[1].acceso = 2;
-	memset(nombrePersona[1].oid, '\0', MAX_MENSAJE_SNMP);
-	memset(nombrePersona[1].instancia, '\0', MAX_MENSAJE_SNMP);
-	strcpy(nombrePersona[1].oid, "1.3.6.1.3.53.9.8.1.2");
-	strcpy(nombrePersona[1].instancia, "1.3.6.1.3.53.9.8.1.2.120");
-	nombrePersona[1].tipo_valor.val.val_cad = (char*)"Pablo de Juan";
-	nombrePersona[1].tipo_valor.sig_fila = NULL;
-	nombrePersona[1].tipo_valor.sig_col = NULL;
-	nombrePersona[1].sig = NULL;
-	nombrePersona[1].indice = NULL;
-
-	return nombreDispositivo;
 }
