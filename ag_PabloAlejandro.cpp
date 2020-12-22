@@ -267,7 +267,7 @@ int main(int argc, char* argv[])
 
 	ipDisp->tipo_obj = 0;
 	ipDisp->tipo_de_dato = 2;
-	ipDisp->acceso = 1;
+	ipDisp->acceso = 2; // TEMP *** estaba acceso a 1
 	memset(ipDisp->oid, '\0', MAX_MENSAJE_SNMP);
 	memset(ipDisp->instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(ipDisp->oid, "1.3.6.1.3.53.9.5");
@@ -344,6 +344,8 @@ int main(int argc, char* argv[])
 	strcpy(nEntradas[0].oid, "1.3.6.1.3.53.9.6.1.2");
 	strcpy(nEntradas[0].instancia, "1.3.6.1.3.53.9.6.1.2.100");
 	nEntradas[0].tipo_valor.val.val_int = 3;
+	nEntradas[0].min_bound = 0;
+	nEntradas[0].max_bound = 127;
 	nEntradas[0].tipo_valor.sig_fila = &nEntradas[1].tipo_valor;
 	nEntradas[0].tipo_valor.sig_col = &nSalidas[0].tipo_valor;
 	nEntradas[0].sig = &nEntradas[1];
@@ -357,6 +359,8 @@ int main(int argc, char* argv[])
 	strcpy(nEntradas[1].oid, "1.3.6.1.3.53.9.6.1.2");
 	strcpy(nEntradas[1].instancia, "1.3.6.1.3.53.9.6.1.2.127");
 	nEntradas[1].tipo_valor.val.val_int = 4;
+	nEntradas[1].min_bound = 0;
+	nEntradas[1].max_bound = 127;
 	nEntradas[1].tipo_valor.sig_fila = NULL;
 	nEntradas[1].tipo_valor.sig_col = &nSalidas[1].tipo_valor;
 	nEntradas[1].sig = &nSalidas[0];
@@ -370,6 +374,8 @@ int main(int argc, char* argv[])
 	strcpy(nSalidas[0].oid, "1.3.6.1.3.53.9.6.1.3");
 	strcpy(nSalidas[0].instancia, "1.3.6.1.3.53.9.6.1.3.100");
 	nSalidas[0].tipo_valor.val.val_int = 5;
+	nSalidas[0].min_bound = 0;
+	nSalidas[0].max_bound = 127;
 	nSalidas[0].tipo_valor.sig_fila = &nSalidas[1].tipo_valor;
 	nSalidas[0].tipo_valor.sig_col = NULL;
 	nSalidas[0].sig = &nSalidas[1];
@@ -383,6 +389,8 @@ int main(int argc, char* argv[])
 	strcpy(nSalidas[1].oid, "1.3.6.1.3.53.9.6.1.3");
 	strcpy(nSalidas[1].instancia, "1.3.6.1.3.53.9.6.1.3.127");
 	nSalidas[1].tipo_valor.val.val_int = 6;
+	nSalidas[1].min_bound = 0;
+	nSalidas[1].max_bound = 127;
 	nSalidas[1].tipo_valor.sig_fila = NULL;
 	nSalidas[1].tipo_valor.sig_col = NULL;
 	nSalidas[1].sig = &tablaDispositivos;
@@ -460,6 +468,8 @@ int main(int argc, char* argv[])
 	strcpy(modeloDispositivo[0].oid, "1.3.6.1.3.53.9.7.1.2");
 	strcpy(modeloDispositivo[0].instancia, "1.3.6.1.3.53.9.7.1.2.100.10.1.3");
 	modeloDispositivo[0].tipo_valor.val.val_int = 1;
+	modeloDispositivo[0].min_bound = 0;
+	modeloDispositivo[0].max_bound = 127;
 	modeloDispositivo[0].tipo_valor.sig_fila = &modeloDispositivo[1].tipo_valor;
 	modeloDispositivo[0].tipo_valor.sig_col = &tipoTarjeta[0].tipo_valor;
 	modeloDispositivo[0].sig = &modeloDispositivo[1];
@@ -473,6 +483,8 @@ int main(int argc, char* argv[])
 	strcpy(modeloDispositivo[1].oid, "1.3.6.1.3.53.9.7.1.2");
 	strcpy(modeloDispositivo[1].instancia, "1.3.6.1.3.53.9.7.1.2.92.93.1.4");
 	modeloDispositivo[1].tipo_valor.val.val_int = 2;
+	modeloDispositivo[1].min_bound = 0;
+	modeloDispositivo[1].max_bound = 127;
 	modeloDispositivo[1].tipo_valor.sig_fila = NULL;
 	modeloDispositivo[1].tipo_valor.sig_col = &tipoTarjeta[1].tipo_valor;
 	modeloDispositivo[1].sig = &tipoTarjeta[0];
@@ -486,6 +498,8 @@ int main(int argc, char* argv[])
 	strcpy(tipoTarjeta[0].oid, "1.3.6.1.3.53.9.7.1.3");
 	strcpy(tipoTarjeta[0].instancia, "1.3.6.1.3.53.9.7.1.3.100.10.1.3");
 	tipoTarjeta[0].tipo_valor.val.val_int = 1;
+	tipoTarjeta[0].min_bound = 0;
+	tipoTarjeta[0].max_bound = 127;
 	tipoTarjeta[0].tipo_valor.sig_fila = &tipoTarjeta[1].tipo_valor;
 	tipoTarjeta[0].tipo_valor.sig_col = &fechaInstalacion[0].tipo_valor;
 	tipoTarjeta[0].sig = &tipoTarjeta[1];
@@ -499,6 +513,8 @@ int main(int argc, char* argv[])
 	strcpy(tipoTarjeta[1].oid, "1.3.6.1.3.53.9.7.1.3");
 	strcpy(tipoTarjeta[1].instancia, "1.3.6.1.3.53.9.7.1.3.92.93.1.4");
 	tipoTarjeta[1].tipo_valor.val.val_int = 2;
+	tipoTarjeta[1].min_bound = 0;
+	tipoTarjeta[1].max_bound = 127;
 	tipoTarjeta[1].tipo_valor.sig_fila = NULL;
 	tipoTarjeta[1].tipo_valor.sig_col = &fechaInstalacion[1].tipo_valor;
 	tipoTarjeta[1].sig = &fechaInstalacion[0];
@@ -564,6 +580,8 @@ int main(int argc, char* argv[])
 	strcpy(dia[0].oid, "1.3.6.1.3.53.9.8.1.1");
 	strcpy(dia[0].instancia, "1.3.6.1.3.53.9.8.1.1.50");
 	dia[0].tipo_valor.val.val_int = 50;
+	dia[0].min_bound = 0;
+	dia[0].max_bound = 127;
 	dia[0].tipo_valor.sig_fila = NULL;
 	dia[0].tipo_valor.sig_col = NULL;
 	dia[0].sig = &dia[1];
@@ -577,6 +595,8 @@ int main(int argc, char* argv[])
 	strcpy(dia[1].oid, "1.3.6.1.3.53.9.8.1.1");
 	strcpy(dia[1].instancia, "1.3.6.1.3.53.9.8.1.1.120");
 	dia[1].tipo_valor.val.val_int = 120;
+	dia[1].min_bound = 0;
+	dia[1].max_bound = 127;
 	dia[1].tipo_valor.sig_fila = NULL;
 	dia[1].tipo_valor.sig_col = &nombrePersona[1].tipo_valor;
 	dia[1].sig = &nombrePersona[0];
@@ -725,6 +745,9 @@ int main(int argc, char* argv[])
 					else if(T == 2){
 						cout << V.val.val_int << endl;
 					}
+					else if (T == 64) {
+						printf("%d.%d.%d.%d\n", V.val.val_cad[0], V.val.val_cad[1], V.val.val_cad[2], V.val.val_cad[3]);
+					}
 					else {
 						cout << V.val.val_cad << endl;
 					}
@@ -738,7 +761,7 @@ int main(int argc, char* argv[])
 
 		//enviamos la respuesta
 		int ret = sendto(s, buff, l, 0, (const struct sockaddr*)&dest, (socklen_t)sizeof(dest));
-		cout << ret << " bytes sent to 127.0.0.1:" << ntohs(dest.sin_port) << endl;
+		cout << ret << " bytes sent to 127.0.0.1:" << ntohs(dest.sin_port) << endl << endl << endl;
 
 	}
 
@@ -807,6 +830,19 @@ void read_octetstring(const char* buff, uint8_t L, nvalor* V) {
 }
 
 /*
+* Introduce en valor un IpAddress
+*/
+void read_ipaddress(const char* buff, uint8_t L, nvalor* V) {
+
+	V->val.val_cad = (char*)malloc(L); // el string y un '\0'
+	if (V->val.val_cad == NULL) {
+		cout << "ERROR, memory asignation, read_octectstring" << endl;
+	}
+
+	memcpy((char*)V->val.val_cad, buff, L);
+}
+
+/*
 *
 */
 void read_oid(const char* buff, uint8_t L, nvalor* V) {
@@ -832,8 +868,6 @@ void final_oid(char* oid, const uint8_t* cad, uint8_t L) {
 	int x = int(cad[0]) / 40;
 	int  y = int(cad[0]) - (x * 40);
 	sprintf(oid, "%d.%d.", x, y);
-
-	cout << endl << "DEBUG FINAL_OID FUNCTION: " << endl;
 
 	// TEMP *** con números mayores de 127 en el oid no los pasa caracter bien
 
@@ -895,6 +929,12 @@ uint16_t read_tlv(const char* buff, uint8_t* T, uint8_t* L, nvalor* V) {
 		index += read_tlv(&buff[index], T, L, V);
 		break;
 
+		// IPADDRESS (0X40)
+	case 64:
+		read_ipaddress(&buff[index], *L, V);
+		index += *L;
+		break;
+
 		// SNMP OPERATIONS
 		// GET (0xA0)
 	case 160:
@@ -920,15 +960,11 @@ nodo * buscarOID(nodo* MIB, char* oid) {
 	
 	nodo *aux = MIB;
 
-	cout << endl << endl << "BUSCAROID DEBUG:" << endl;
-	cout << oid << "\t\t ---> " << aux->instancia << endl;
-
 	while ((aux != NULL) && (strcmp(oid, aux->instancia) != 0)) {
 		aux = aux->sig;
 		if (aux == NULL) {
 			return aux;
 		}
-		cout << oid << "\t\t ---> " << aux->instancia << endl;
 	}
 
 	return aux;
@@ -943,8 +979,6 @@ nodo* buscarNextOID(nodo* MIB, char* oid) {
 
 	nodo* aux = MIB;
 
-	cout << endl << endl << "BUSCAROID DEBUG:" << endl;
-	cout << oid << "\t\t ---> " << aux->instancia << endl;
 
 	while ((aux != NULL) && (strcmp(oid, aux->instancia) != 0)) {
 		aux = aux->sig;
@@ -954,13 +988,14 @@ nodo* buscarNextOID(nodo* MIB, char* oid) {
 		while ((aux->tipo_obj == 1) || (aux->tipo_obj == 2)) {
 			aux = aux->sig;
 		}
-		cout << oid << "\t\t ---> " << aux->instancia << endl;
 	}
 
 	aux = aux->sig;
+	if (aux == NULL) {
+		return aux;
+	}
 	while ((aux->tipo_obj == 1) || (aux->tipo_obj == 2)) {
 		aux = aux->sig;
-		cout << oid << "\t\t ---> " << aux->oid << endl;
 	}
 
 	return aux;
@@ -1074,7 +1109,7 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 	int valtype; // tipo del valor del objeto a leer
 	uint8_t seterror = 0; //almacena errores
 	uint8_t seterror_index = 0; // apunta al valor en el que ha fallado la operacion set.
-	uint8_t added = 0; //numero de bytes añadidos al crear el response con respecto al request
+	int added = 0; //numero de bytes añadidos al crear el response con respecto al request
 	uint8_t bytesoid[256]; // almacena el oid en bytes una vez transformado de cadena
 	char* octetstr[256]; // almacena el valor OCTET STRING que lee de la mib
 	nodo* auxiliar = NULL;
@@ -1135,7 +1170,6 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 
 				buff[VBL] = 64;
 				V.val.val_cad = auxiliar->tipo_valor.val.val_cad;
-				cout << V.val.val_cad[0] << " . " << V.val.val_cad[3] << endl;
 				buff[VBL + 1] = 4;
 				added = uint16_t(buff[VBL + 1]);
 				memcpy(&buff[VBL + 2], V.val.val_cad, added);
@@ -1325,12 +1359,15 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 					trapdest.sin_family = AF_INET;
 					inet_pton(PF_INET, "127.0.0.1", &trapdest.sin_addr.s_addr);
 					trapdest.sin_port = htons(TRAPPORT); // choose any
-					int ret = sendto(s, trapmsg, ltrap, 0, (const struct sockaddr*)&trapdest, (socklen_t)sizeof(trapdest)); // TEMP *** hace que se reciva un paquete raro, eliminar esta instrucción
-					cout << "message SENT to: " << ntohs(trapdest.sin_port) << " - " << ret << " bytes" << endl;
+					// int ret = sendto(s, trapmsg, ltrap, 0, (const struct sockaddr*)&trapdest, (socklen_t)sizeof(trapdest)); // TEMP *** hace que se reciva un paquete raro, eliminar esta instrucción
+					// cout << "message SENT to: " << ntohs(trapdest.sin_port) << " - " << ret << " bytes" << endl;
 				}
 				else {
 					auxiliar->tipo_valor.val.val_int = V.val.val_int;
 				}
+			}
+			else if (valtype == 2) {
+				memcpy(auxiliar->tipo_valor.val.val_cad, V.val.val_cad, 4);
 			}
 			else {
 				auxiliar->tipo_valor.val.val_cad = V.val.val_cad;
@@ -1348,8 +1385,6 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 		
 		break;
 	}
-
-	print_hex(buff, l + added);
 
 	return l + added;
 

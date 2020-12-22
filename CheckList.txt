@@ -60,7 +60,7 @@ Operación de Escritura
 - Procesamiento de mensajes con un solo objeto escalar.
 	i) (*M*) Objetos de tipo INTEGER.
 	ii) Objetos de tipo OCTET STRING, OBJECT IDENTIFIER e IpAddress.
-- Escritura en objetos tabulares sobre filas ya creadas (un objeto o varios). --> REVISAR
+- Escritura en objetos tabulares sobre filas ya creadas (un objeto o varios).
 	i) Con índice de tipo INTEGER.
 	ii) Con índice de tipo IpAddress.
 - Identificación de errores en el procesamiento de la petición y generación de la
@@ -82,4 +82,5 @@ respuesta con un código de error adecuado.
 
 
 GESTIÓN DE NOTIFICACIONES
-- Envío correcto pero ManageEngine no recibe el mensaje.
+- Envío correcto pero ManageEngine no recibe el mensaje TRAP, aunque en 
+Wireshark se puede ver que se envia y está bien formado.
