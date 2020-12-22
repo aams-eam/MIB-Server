@@ -10,7 +10,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <winsock2.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 #include <string.h>
 #include <iostream>
 #include <WS2tcpip.h> //para usar la funcion InetPton que transforma ip string a in_addr
@@ -25,7 +25,7 @@ using namespace std;
 // SNMP
 #define MAX_MENSAJE_SNMP	2048
 #define UDPPORT				161		//Puerto de nuestro ordenador en el que estamos abriendo el socket
-#define TRAPPORT			6162	//Puerto de envio de los trap
+#define TRAPPORT			162	//Puerto de envio de los trap
 
 // Funciones auxiliares
 #define LOG(s)	fprintf(flog, "%s", s); fflush(flog);
@@ -191,8 +191,6 @@ int main(int argc, char* argv[])
 	socklen_t slen;
 
 	//Carga de la MIB
-	// MIB = loadMIB(); // TEMP *** 
-
 	nodo* nombreDispositivo = NULL, * personaContacto = NULL, * personasEntran, * personasSalen, * ipDisp,
 		* tablaHistoricos, * filaTablaHistoricos, diaAno[2], nEntradas[2], nSalidas[2],
 		tablaDispositivos, filaTablaDispositivos, ipDispositivo[2], modeloDispositivo[2], tipoTarjeta[2], fechaInstalacion[2],
@@ -232,9 +230,6 @@ int main(int argc, char* argv[])
 	personaContacto->sig = personasEntran;
 	personaContacto->indice = NULL;
 
-
-	// TEMP *** Hace falta poner el min_bound y max_bound en el resto de valores que no son 
-	// de tipo INTEGER?
 	personasEntran->tipo_obj = 0;
 	personasEntran->tipo_de_dato = 0;
 	personasEntran->acceso = 2;
@@ -267,7 +262,7 @@ int main(int argc, char* argv[])
 
 	ipDisp->tipo_obj = 0;
 	ipDisp->tipo_de_dato = 2;
-	ipDisp->acceso = 2; // TEMP *** estaba acceso a 1
+	ipDisp->acceso = 1;  // TEMP *** 2 para read-write y hacer pruebas con ip
 	memset(ipDisp->oid, '\0', MAX_MENSAJE_SNMP);
 	memset(ipDisp->instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(ipDisp->oid, "1.3.6.1.3.53.9.5");
@@ -429,7 +424,6 @@ int main(int argc, char* argv[])
 	memset(ipDispositivo[0].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(ipDispositivo[0].oid, "1.3.6.1.3.53.9.7.1.1");
 	strcpy(ipDispositivo[0].instancia, "1.3.6.1.3.53.9.7.1.1.100.10.1.3");
-	temp[4];
 	temp[0] = 100;
 	temp[1] = 10;
 	temp[2] = 1;
@@ -448,7 +442,6 @@ int main(int argc, char* argv[])
 	memset(ipDispositivo[1].instancia, '\0', MAX_MENSAJE_SNMP);
 	strcpy(ipDispositivo[1].oid, "1.3.6.1.3.53.9.7.1.1");
 	strcpy(ipDispositivo[1].instancia, "1.3.6.1.3.53.9.7.1.1.92.93.1.4");
-	temp[4];
 	temp[0] = 92;
 	temp[1] = 93;
 	temp[2] = 1;
@@ -639,20 +632,20 @@ int main(int argc, char* argv[])
 		memset(oid, 0, sizeof(oid));
 		fflush(stdout);
 
-		//recibimos la peticion
-		slen = sizeof(struct sockaddr_in);
-		l = recvfrom(s, buff, MAX_MENSAJE_SNMP, 0, (struct sockaddr*)&dest, &slen);
-		cout << l << " bytes received from 127.0.0.1:" << ntohs(dest.sin_port) << endl;
-		if (l == SOCKET_ERROR && l < MAX_MENSAJE_SNMP) {
-			LOGP("Error recvfrom\n");
-			closesocket(s);
-			return -1;
-		}
-		else if (l > MAX_MENSAJE_SNMP) {
-			LOGP("TRAP: Error PORT UNREACHABLE");
-			closesocket(s);
-			return -1;
-		}
+		do {
+			slen = sizeof(struct sockaddr_in);
+			l = recvfrom(s, buff, MAX_MENSAJE_SNMP, 0, (struct sockaddr*)&dest, &slen);
+			cout << l << " bytes received from 127.0.0.1:" << ntohs(dest.sin_port) << endl;
+			if (l == SOCKET_ERROR && l < MAX_MENSAJE_SNMP) {
+				LOGP("Error recvfrom\n");
+				closesocket(s);
+				return -1;
+			}
+			else if (l > MAX_MENSAJE_SNMP) {
+				LOGP("TRAP: Error PORT UNREACHABLE");
+			}
+		} while (l > MAX_MENSAJE_SNMP);
+		
 
 		//imprimimos el mensaje en hexadecimal para analizar su composicion
 		//recorremos todos los bytes
@@ -723,8 +716,6 @@ int main(int argc, char* argv[])
 					//guarda posiciones del byte T de VarBindList y VarBind
 					ain[2] = index;
 					ain[3] = index + 2;
-
-					// TEMP *** y si se hace get de varios objetos?
 
 					// ObjectIdentifier
 					index += read_tlv(&buff[index], &T, &L, &V);
@@ -798,11 +789,9 @@ void print_hex(const char* buff, unsigned int l) {
 /*
 * Introduce en valor un entero
 */
-// TEMP *** para enteros negativos?
 void read_integer(const char* buff, uint8_t L, nvalor* V) {
 
 	int v = 0;
-	// TEMP *** ALEX, si tiene mas de 4 octetos esto da problemas porque es un int.
 	// aplazamos 8 bits a la izquierda y añadimos los bits a la derecha
 	for (int i = 0; unsigned(i) < L; i++) {
 		v = v << 8;
@@ -819,7 +808,6 @@ void read_integer(const char* buff, uint8_t L, nvalor* V) {
 void read_octetstring(const char* buff, uint8_t L, nvalor* V) {
 
 	//creamos memoria para la longitud
-	// TEMP *** liberar memoria una vez que hayas usado el valor obtenido
 	V->val.val_cad = (char*)malloc(L + 1); // el string y un '\0'
 	if (V->val.val_cad == NULL) {
 		cout << "ERROR, memory asignation, read_octectstring" << endl;
@@ -847,7 +835,6 @@ void read_ipaddress(const char* buff, uint8_t L, nvalor* V) {
 */
 void read_oid(const char* buff, uint8_t L, nvalor* V) {
 	//creamos memoria para la longitud
-	// TEMP *** liberar memoria una vez que hayas usado el valor obtenido
 	V->val.val_cad = (char*)malloc(L); // el string y un '\0'
 	if (V->val.val_cad == NULL) {
 		cout << "ERROR, memory asignation, read_oid" << endl;
@@ -868,8 +855,6 @@ void final_oid(char* oid, const uint8_t* cad, uint8_t L) {
 	int x = int(cad[0]) / 40;
 	int  y = int(cad[0]) - (x * 40);
 	sprintf(oid, "%d.%d.", x, y);
-
-	// TEMP *** con números mayores de 127 en el oid no los pasa caracter bien
 
 	for (int i = 1; i < L; i++) {
 
@@ -974,9 +959,6 @@ nodo * buscarOID(nodo* MIB, char* oid) {
 
 nodo* buscarNextOID(nodo* MIB, char* oid) {
 
-	// TEMP *** Estamos cogiendolo con los oid cuando deberíamos de comprobarlo 
-	// con las instancias para poder hacer un getnext a una fila específica.
-
 	nodo* aux = MIB;
 
 
@@ -1047,7 +1029,7 @@ size_t create_trap(char* msg, nodo* actual, nvalor V) {
 	memset(bytesoid, 0, sizeof(bytesoid));
 
 	// convertimos el oid a bytes y almacenamos su longitud
-	loid = oidToBytes(actual->oid, bytesoid);
+	loid = oidToBytes(actual->instancia, bytesoid);
 
 	// FORMAMOS EL PAQUETE
 
@@ -1058,7 +1040,7 @@ size_t create_trap(char* msg, nodo* actual, nvalor V) {
 	// Version
 	msg[2] = 2;
 	msg[3] = 1;
-	msg[4] = 1; // version SNMPv1
+	msg[4] = 0; // version SNMPv1
 
 	// Comunidad
 	msg[5] = 4;
@@ -1093,7 +1075,6 @@ size_t create_trap(char* msg, nodo* actual, nvalor V) {
 	msg[28 + loid] = V.val.val_int;
 
 	// Tiempo del agente
-	// TEMP *** en wikipedia pone entero de 32 bits
 	msg[29 + loid] = 67;
 	msg[30 + loid] = 2;
 	msg[31 + loid] = 2;
@@ -1154,7 +1135,7 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 
 				buff[VBL] = 2; // indicamos que es de tipo int
 				// vemos cuantos bytes necesita ese int
-				buff[VBL + 1] = 1; // TEMP *** PABLO aquí ver la cantidad de bytes que se necesitan para el integer y cambiarla por el 1 que hay = 1 por = long;
+				buff[VBL + 1] = 1;
 				added = uint16_t(buff[VBL + 1]);
 				V.val.val_int = auxiliar->tipo_valor.val.val_int; //Lee de la MIB con ese OID en el valor nvalor V
 				buff[VBL + 2] = uint8_t(V.val.val_int);
@@ -1193,8 +1174,6 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 				}
 
 			}
-
-			// TEMP *** añadir el tipo ipAddress
 		}
 
 		//ponemos el tipo a GetResponse (162)
@@ -1255,7 +1234,7 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 			}
 			else if (valtype == 2) { // direccion Ip
 
-				buff[VBL] = 64; // TEMP *** PABLO Aquí indicar el tipo que es OCTET STRING, IP LO QUE SEA, ETC.
+				buff[VBL] = 64;
 				V.val.val_cad = auxiliar->tipo_valor.val.val_cad;
 				buff[VBL + 1] = 4;
 				added = uint16_t(buff[VBL + 1]);
@@ -1287,7 +1266,7 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 			}
 			else { // cualquier otro tipo se trata como cadena
 
-				buff[VBL] = 4; // TEMP *** PABLO Aquí indicar el tipo que es OCTET STRING, IP LO QUE SEA, ETC.
+				buff[VBL] = 4;
 				V.val.val_cad = auxiliar->tipo_valor.val.val_cad;
 				buff[VBL + 1] = strlen(V.val.val_cad);
 				added = uint16_t(buff[VBL + 1]);
@@ -1355,12 +1334,32 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 					print_hex(trapmsg, ltrap);
 
 					// Enviamos el paquete al puerto TRAPPORT
+					sockaddr_in traplocal;
+					traplocal.sin_family = AF_INET;
+					inet_pton(PF_INET, "127.0.0.1", &traplocal.sin_addr.s_addr);
+					traplocal.sin_port = htons(162); // choose any
+
+					// creamos la variable del socket y lo creamos
+					SOCKET strap = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
+					if (strap < 0) {
+						LOGP("Socket creation error\n");
+						return -1;
+					}
+					// bind to the local address in 127.0.0.1:161
+					if (bind(strap, (sockaddr*)&traplocal, (socklen_t)sizeof(traplocal)) != 0) {
+						LOGP("Bind error\n");
+						return -1;
+					}
+
+
 					sockaddr_in trapdest;
 					trapdest.sin_family = AF_INET;
 					inet_pton(PF_INET, "127.0.0.1", &trapdest.sin_addr.s_addr);
 					trapdest.sin_port = htons(TRAPPORT); // choose any
-					// int ret = sendto(s, trapmsg, ltrap, 0, (const struct sockaddr*)&trapdest, (socklen_t)sizeof(trapdest)); // TEMP *** hace que se reciva un paquete raro, eliminar esta instrucción
-					// cout << "message SENT to: " << ntohs(trapdest.sin_port) << " - " << ret << " bytes" << endl;
+					int ret = sendto(strap, trapmsg, ltrap, 0, (const struct sockaddr*)&trapdest, (socklen_t)sizeof(trapdest));  // TEMP *** hace que se reciva un paquete raro, eliminar esta instrucción
+					cout << "message SENT to: " << ntohs(trapdest.sin_port) << " - " << ret << " bytes" << endl;
+
+					closesocket(strap);
 				}
 				else {
 					auxiliar->tipo_valor.val.val_int = V.val.val_int;
