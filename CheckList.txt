@@ -60,7 +60,9 @@ Operación de Escritura
 - Procesamiento de mensajes con un solo objeto escalar.
 	i) (*M*) Objetos de tipo INTEGER.
 	ii) Objetos de tipo OCTET STRING, OBJECT IDENTIFIER e IpAddress.
-
+- Escritura en objetos tabulares sobre filas ya creadas (un objeto o varios). --> REVISAR
+	i) Con índice de tipo INTEGER.
+	ii) Con índice de tipo IpAddress.
 - Identificación de errores en el procesamiento de la petición y generación de la
 respuesta con un código de error adecuado.
 
@@ -69,6 +71,12 @@ RECORRIDO DE LA MIB
 - Procesamiento de mensajes con un solo objeto escalar.
 	i) (*M*) Objetos de tipo INTEGER.
 	ii) Objetos de tipo OCTET STRING, OBJECT IDENTIFIER e IpAddress.
+- Identificación de errores en el procesamiento de la petición y generación de la
+respuesta con un código de error adecuado.
+- Procesamiento de mensajes con objetos tabulares (un objeto o varios). Hay 2
+categorías:
+	i) Con índice de tipo INTEGER.
+	ii) Con índice de tipo IpAddress.
 - Identificación de errores en el procesamiento de la petición y generación de la
 respuesta con un código de error adecuado.
 

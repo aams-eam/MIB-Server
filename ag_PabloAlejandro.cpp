@@ -277,7 +277,7 @@ int main(int argc, char* argv[])
 	temp[1] = 0;
 	temp[2] = 0;
 	temp[3] = 1;
-	ipDisp->tipo_valor.val.val_cad = malloc(4);
+	ipDisp->tipo_valor.val.val_cad = (char *) malloc(4);
 	memcpy(ipDisp->tipo_valor.val.val_cad, temp, 4); // TEMP *** para codificarlo como si fuera una ip
 	// ipDisp->tipo_valor.val.val_cad = (char*)"192.168.1.2";
 	ipDisp->tipo_valor.sig_fila = NULL;
