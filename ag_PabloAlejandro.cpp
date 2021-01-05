@@ -25,7 +25,7 @@ using namespace std;
 // SNMP
 #define MAX_MENSAJE_SNMP	2048
 #define UDPPORT				161		//Puerto de nuestro ordenador en el que estamos abriendo el socket
-#define TRAPPORT			162	//Puerto de envio de los trap
+#define TRAPPORT			163	//Puerto de envio de los trap
 
 // Funciones auxiliares
 #define LOG(s)	fprintf(flog, "%s", s); fflush(flog);
@@ -1079,8 +1079,10 @@ size_t create_trap(char* msg, nodo* actual, nvalor V) {
 	msg[30 + loid] = 2;
 	msg[31 + loid] = 2;
 	msg[32 + loid] = 121;
+	msg[33 + loid] = 48;
+	msg[34 + loid] = 0;
 
-	return 33 + loid;
+	return 35 + loid;
 
 }
 
@@ -1332,12 +1334,13 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 					// Enviamos el trap
 					cout << endl << "TRAP MSG: " << endl;
 					print_hex(trapmsg, ltrap);
-
+					/*
+					* TEMP ***
 					// Enviamos el paquete al puerto TRAPPORT
 					sockaddr_in traplocal;
 					traplocal.sin_family = AF_INET;
 					inet_pton(PF_INET, "127.0.0.1", &traplocal.sin_addr.s_addr);
-					traplocal.sin_port = htons(162); // choose any
+					traplocal.sin_port = htons(161); // choose any
 
 					// creamos la variable del socket y lo creamos
 					SOCKET strap = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -1350,16 +1353,16 @@ size_t create_response(nodo * MIB, int requestid, uint8_t operation, const char*
 						LOGP("Bind error\n");
 						return -1;
 					}
-
+					*/
 
 					sockaddr_in trapdest;
 					trapdest.sin_family = AF_INET;
 					inet_pton(PF_INET, "127.0.0.1", &trapdest.sin_addr.s_addr);
 					trapdest.sin_port = htons(TRAPPORT); // choose any
-					int ret = sendto(strap, trapmsg, ltrap, 0, (const struct sockaddr*)&trapdest, (socklen_t)sizeof(trapdest));  // TEMP *** hace que se reciva un paquete raro, eliminar esta instrucción
+					int ret = sendto(s, trapmsg, ltrap, 0, (const struct sockaddr*)&trapdest, (socklen_t)sizeof(trapdest));  // TEMP *** hace que se reciva un paquete raro, eliminar esta instrucción
 					cout << "message SENT to: " << ntohs(trapdest.sin_port) << " - " << ret << " bytes" << endl;
 
-					closesocket(strap);
+					// closesocket(strap); TEMP ***
 				}
 				else {
 					auxiliar->tipo_valor.val.val_int = V.val.val_int;
