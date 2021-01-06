@@ -822,7 +822,7 @@ void read_octetstring(const char* buff, uint8_t L, nvalor* V) {
 */
 void read_ipaddress(const char* buff, uint8_t L, nvalor* V) {
 
-	V->val.val_cad = (char*)malloc(L); // el string y un '\0'
+	V->val.val_cad = (char*)malloc(L);
 	if (V->val.val_cad == NULL) {
 		cout << "ERROR, memory asignation, read_octectstring" << endl;
 	}
@@ -835,7 +835,7 @@ void read_ipaddress(const char* buff, uint8_t L, nvalor* V) {
 */
 void read_oid(const char* buff, uint8_t L, nvalor* V) {
 	//creamos memoria para la longitud
-	V->val.val_cad = (char*)malloc(L); // el string y un '\0'
+	V->val.val_cad = (char*)malloc(L);
 	if (V->val.val_cad == NULL) {
 		cout << "ERROR, memory asignation, read_oid" << endl;
 	}
