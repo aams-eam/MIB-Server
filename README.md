@@ -1,2 +1,2 @@
-# ag_PabloAlejandro
-proyecto_SNMP final habiendo cambiado el nombre y con todo lo obligatorio hecho
+# MIB Server
+Implementation of a MIB Server with C++
